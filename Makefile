@@ -1,13 +1,13 @@
 CXX = g++
 CPPFLAGS = -Wall -g
-PATH_LIB = ./Library
+PATH_LIB = ./libraries
 PATH_LIB_CTML = $(PATH_LIB)/CTML
-PATH_CLASS = ./Class
+PATH_CLASS = ./classes
 CLASS_TELEPHONE_NUMBER = telephone_number
 CLASS_CONTACT = contact
 CLASS_SMS = sms
 CLASS_UTILS_HTML = utils_html
-DIR_OBJ = ./Obj
+DIR_OBJ = ./obj
 DIR_SMS_PER_CONTACT_DOCS = ./Sms
 FILE_CONTACTS_HTML = contactsReportResult.html
 FILE_SMS_HTML = smsReportResult.html

@@ -18,6 +18,7 @@ class UtilsHtml
         void HtmlWriteContactsReportResult(CTML::Document & htmlDocument, const std::string & headerTitle,
         std::vector<Contact> listOfContacts, const unsigned char & numberOfContactsPerRow,
         const std::string & directoryPathForSmsPerContactDocuments, const std::string & fileExtensionHtml);
+        void HtmlWriteScripts(CTML::Document & htmlDocument, const std::vector<std::string> & listOfHtmlScriptsPaths);
     private:
         std::string HtmlGetNumberOfObjectsMessage(const unsigned int & numberOfObjects, const bool & isContactsReportResult);
         CTML::Node HtmGetContactsListNode(std::vector<Contact> listOfContacts, const unsigned char & numberOfContactsPerRow,

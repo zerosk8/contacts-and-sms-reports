@@ -51,6 +51,15 @@ const std::string & directoryPathForSmsPerContactDocuments, const std::string & 
     htmlDocument.AddNodeToBody(htmlContainerForContactsList);
 }
 
+void UtilsHtml::HtmlWriteScripts(CTML::Document & htmlDocument, const std::vector<std::string> & listOfHtmlScriptsPaths)
+{
+    for(std::vector<std::string>::const_iterator htmlScriptPathIterator = listOfHtmlScriptsPaths.begin(); 
+    htmlScriptPathIterator != listOfHtmlScriptsPaths.end(); ++htmlScriptPathIterator)
+    {
+        htmlDocument.AddNodeToBody(CTML::Node("script").SetAttribute("src",*htmlScriptPathIterator));
+    }
+}
+
 /**************************************/
 
 std::string UtilsHtml::HtmlGetNumberOfObjectsMessage(const unsigned int & numberOfObjects, const bool & isContactsReportResult)

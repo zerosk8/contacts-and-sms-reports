@@ -36,10 +36,9 @@ const string HTML_CONTACTS_DOCUMENT_HEAD_TITLE = "Telephone Contacts";
 const string HTML_SMS_DOCUMENT_HEAD_TITLE = "SMS Messages";
 const string HTML_CHAR_ENCODING = "UTF-8";
 const string HTML_AUTHOR = "Alejandro Mesa";
-const string HTML_STYLE_SHEET_PATH_FOR_CONTACTS_AND_SMS_DOCUMENTS =
-"../Bootstrap/bootstrap-4.0.0-beta.2-dist/css/bootstrap.min.css";
-const string HTML_HEAD_STYLE_SHEET_PATH_FOR_SMS_PER_CONTACT_DOCUMENTS =
-"../../Bootstrap/bootstrap-4.0.0-beta.2-dist/css/bootstrap.min.css";
+const string HTML_STYLE_SHEET_PATH = "./styles/bootstrap-4.1.3/css/bootstrap.min.css";
+const vector<string> HTML_SCRIPTS_PATHS = {"./styles/jquery-3.3.1.min.js","./styles/popper-1.14.4.min.js",
+"./styles/bootstrap-4.1.3/js/bootstrap.min.js"};
 const string DIR_PATH_FOR_SMS_PER_CONTACT_DOCUMENTS = "./Sms";
 const string FILE_EXTENSION_HTML = ".html";
 const string FILE_CONTACTS_REPORT_RESULT = "contactsReportResult" + FILE_EXTENSION_HTML;
@@ -123,8 +122,9 @@ int main(int argc, char ** argv)
         file.close();
         Document smsHtmlDocument;
         UTILS_HTML.HtmlWriteHead(smsHtmlDocument,HTML_SMS_DOCUMENT_HEAD_TITLE,HTML_CHAR_ENCODING,HTML_AUTHOR,
-        HTML_STYLE_SHEET_PATH_FOR_CONTACTS_AND_SMS_DOCUMENTS);
+        HTML_STYLE_SHEET_PATH);
         UTILS_HTML.HtmlWriteSmsReportResult(smsHtmlDocument,HTML_SMS_DOCUMENT_HEAD_TITLE,listOfSms);
+        UTILS_HTML.HtmlWriteScripts(smsHtmlDocument,HTML_SCRIPTS_PATHS);
         if(!WriteHtmlDocumentToReportResultFile(smsHtmlDocument,FILE_SMS_REPORT_RESULT,
         "Error: Could not open the sms report result file"))
         {
@@ -177,13 +177,14 @@ int main(int argc, char ** argv)
         {
             SaveEachSmsIntoEachContactListOfSms(listOfContacts,listOfSms);
             CreateSmsPerContactDocuments(listOfContacts,HTML_SMS_DOCUMENT_HEAD_TITLE,HTML_CHAR_ENCODING,HTML_AUTHOR,
-            HTML_HEAD_STYLE_SHEET_PATH_FOR_SMS_PER_CONTACT_DOCUMENTS,DIR_PATH_FOR_SMS_PER_CONTACT_DOCUMENTS,FILE_EXTENSION_HTML);
+            HTML_STYLE_SHEET_PATH,DIR_PATH_FOR_SMS_PER_CONTACT_DOCUMENTS,FILE_EXTENSION_HTML);
         }
         Document contactsHtmlDocument;
         UTILS_HTML.HtmlWriteHead(contactsHtmlDocument,HTML_CONTACTS_DOCUMENT_HEAD_TITLE,HTML_CHAR_ENCODING,HTML_AUTHOR,
-        HTML_STYLE_SHEET_PATH_FOR_CONTACTS_AND_SMS_DOCUMENTS);
+        HTML_STYLE_SHEET_PATH);
         UTILS_HTML.HtmlWriteContactsReportResult(contactsHtmlDocument,HTML_CONTACTS_DOCUMENT_HEAD_TITLE,listOfContacts,
         NUMBER_OF_CONTACTS_PER_ROW,DIR_PATH_FOR_SMS_PER_CONTACT_DOCUMENTS,FILE_EXTENSION_HTML);
+        UTILS_HTML.HtmlWriteScripts(contactsHtmlDocument,HTML_SCRIPTS_PATHS);
         if(!WriteHtmlDocumentToReportResultFile(contactsHtmlDocument,FILE_CONTACTS_REPORT_RESULT,
         "Error: Could not open the contacts report result file"))
         {
