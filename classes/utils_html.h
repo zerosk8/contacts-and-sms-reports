@@ -12,16 +12,19 @@
 class UtilsHtml
 {
     public:
-        void HtmlWriteHead(CTML::Document & htmlDocument, const std::string & title, const std::string & characterCodification,
-        const std::string & author, const std::string & styleSheetFile);
-        void HtmlWriteSmsReportResult(CTML::Document & htmlDocument, const std::string & headerTitle, std::vector<Sms> listOfSms);
-        void HtmlWriteContactsReportResult(CTML::Document & htmlDocument, const std::string & headerTitle,
+        void HtmlWriteDocumentHead(CTML::Document & htmlDocument, 
+        const std::string & characterCodification, const std::string & viewport, 
+        const std::string & author, const std::vector<std::string> & styleSheetsPaths, 
+        const std::string & title);
+        void HtmlWriteHeaderInDocumentBody(CTML::Document & htmlDocument, const std::string & headerTitle);
+        void HtmlWriteSmsReportResultInDocumentBody(CTML::Document & htmlDocument, const std::string & headerTitle, std::vector<Sms> listOfSms);
+        void HtmlWriteContactsReportResultInDocumentBody(CTML::Document & htmlDocument, const std::string & headerTitle,
         std::vector<Contact> listOfContacts, const unsigned char & numberOfContactsPerRow,
         const std::string & directoryPathForSmsPerContactDocuments, const std::string & fileExtensionHtml);
-        void HtmlWriteScripts(CTML::Document & htmlDocument, const std::vector<std::string> & listOfHtmlScriptsPaths);
+        void HtmlWriteScriptsInDocumentBody(CTML::Document & htmlDocument, const std::vector<std::string> & listOfHtmlScriptsPaths);
     private:
         std::string HtmlGetNumberOfObjectsMessage(const unsigned int & numberOfObjects, const bool & isContactsReportResult);
-        CTML::Node HtmGetContactsListNode(std::vector<Contact> listOfContacts, const unsigned char & numberOfContactsPerRow,
+        std::pair<CTML::Node,CTML::Node> HtmGetContactsNavigationBarNodeAndContactsListNode(std::vector<Contact> listOfContacts, const unsigned char & numberOfContactsPerRow,
         const std::string & directoryPathForSmsPerContactDocuments, const std::string & fileExtensionHtml);
         void HtmlInitializePanelForContactsGroup(const char & firstLetterOfName, CTML::Node * & htmlPanelForContactsGroup, 
         CTML::Node * & htmlPanelHeadingForInitialLetter, CTML::Node * & htmlPanelBodyForRowsOfContacts, 

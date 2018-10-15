@@ -1,0 +1,10 @@
+#idMainNavigationBar a.nav-link
+{
+    border: 1px solid;
+    color: white;
+}
+#idMainNavigationBar a.nav-link.active
+{
+    background: white;
+    color: #007bff;
+}
