@@ -19,9 +19,9 @@ const std::vector<std::string> & styleSheetsPaths, const std::string & title)
 
 void UtilsHtml::HtmlWriteHeaderInDocumentBody(CTML::Document & htmlDocument, const std::string & headerTitle)
 {
-    CTML::Node htmlBodyHeader("header.container-fluid.bg-primary.text-light");
+    CTML::Node htmlBodyHeader("header.container-fluid.bg-dark.text-light.shadow");
     htmlBodyHeader.AppendChild(CTML::Node("div.d-flex.justify-content-center")
-    .AppendChild(CTML::Node("h2.py-3","Phone Contacts Report")));
+    .AppendChild(CTML::Node("h2.py-2","Phone Contacts Report")));
     CTML::Node htmlMainNavigationBarNav("ul.nav.nav-pills.py-3");
     htmlMainNavigationBarNav.SetAttribute("id","idMainNavigationBar");
     htmlMainNavigationBarNav.AppendChild(CTML::Node("li.nav-item.mx-5")
@@ -36,8 +36,8 @@ void UtilsHtml::HtmlWriteSmsReportResultInDocumentBody(CTML::Document & htmlDocu
 std::vector<Sms> listOfSms)
 {
     CTML::Node htmlContainerForAllSms("div.container"), htmlListForAllSms("div.list-group");
-    htmlContainerForAllSms.AppendChild(CTML::Node("h1",headerTitle))
-    .AppendChild(CTML::Node("p.lead",HtmlGetNumberOfObjectsMessage(listOfSms.size(),false)));
+    htmlContainerForAllSms.AppendChild(CTML::Node("h1.mt-3",headerTitle))
+    .AppendChild(CTML::Node("p",HtmlGetNumberOfObjectsMessage(listOfSms.size(),false)));
     for(std::vector<Sms>::iterator smsIterator = listOfSms.begin(); smsIterator != listOfSms.end(); ++smsIterator)
     {
         CTML::Node htmlSmsNode("li.list-group-item");
@@ -65,10 +65,11 @@ void UtilsHtml::HtmlWriteContactsReportResultInDocumentBody(CTML::Document & htm
 std::vector<Contact> listOfContacts, const unsigned char & numberOfContactsPerRow,
 const std::string & directoryPathForSmsPerContactDocuments, const std::string & fileExtensionHtml)
 {
-    CTML::Node htmlContainerForContactsList("main.container");
-    htmlContainerForContactsList.AppendChild(CTML::Node("h3.pt-3",headerTitle))
-    .AppendChild(CTML::Node("p.lead",HtmlGetNumberOfObjectsMessage(listOfContacts.size(),true)));
-    std::pair<CTML::Node,CTML::Node> pairOfNavigationBarAndContactsList = HtmGetContactsNavigationBarNodeAndContactsListNode(listOfContacts,numberOfContactsPerRow,
+    CTML::Node htmlContainerForContactsList("main.container.pt-4");
+    htmlContainerForContactsList.AppendChild(CTML::Node("h3",headerTitle))
+    .AppendChild(CTML::Node("p",HtmlGetNumberOfObjectsMessage(listOfContacts.size(),true)));
+    std::pair<CTML::Node,CTML::Node> pairOfNavigationBarAndContactsList = 
+    HtmGetContactsNavigationBarNodeAndContactsListNode(listOfContacts,numberOfContactsPerRow,
     directoryPathForSmsPerContactDocuments,fileExtensionHtml);
     htmlContainerForContactsList.AppendChild(pairOfNavigationBarAndContactsList.first);
     htmlContainerForContactsList.AppendChild(pairOfNavigationBarAndContactsList.second);
@@ -103,95 +104,79 @@ std::string UtilsHtml::HtmlGetNumberOfObjectsMessage(const unsigned int & number
     return "There are no messages";
 }
 
-std::pair<CTML::Node,CTML::Node> UtilsHtml::HtmGetContactsNavigationBarNodeAndContactsListNode(std::vector<Contact> listOfContacts, const unsigned char & numberOfContactsPerRow,
+std::pair<CTML::Node,CTML::Node> UtilsHtml::HtmGetContactsNavigationBarNodeAndContactsListNode
+(std::vector<Contact> listOfContacts, const unsigned char & numberOfContactsPerRow,
 const std::string & directoryPathForSmsPerContactDocuments, const std::string & fileExtensionHtml)
 {
     CTML::Node htmlContainerForContactsList("div.container");
     if(listOfContacts.size() > 0)
     {
-        unsigned int contactIndex = 0;
-        char firstLetterOfName = listOfContacts[0].GetName()[0];
-        CTML::Node htmlContainerForAllContacts("div.col"), * htmlPanelForContactsGroup = NULL;
-        CTML::Node * htmlPanelHeadingForInitialLetter = NULL, * htmlPanelBodyForRowsOfContacts = NULL, * htmlRowOfContacts = NULL;
-        CTML::Node htmlNavigation("nav.nav.bg-light sticky-top");
-        HtmlInitializePanelForContactsGroup(firstLetterOfName,htmlPanelForContactsGroup,htmlPanelHeadingForInitialLetter,
-        htmlPanelBodyForRowsOfContacts,htmlRowOfContacts);
+        CTML::Node htmlNavigation("nav.nav.bg-light.sticky-top");
+        CTML::Node htmlContainerForAllContacts("div.container");
+        CTML::Node * htmlRowOfContacts;
+        char firstLetterOfName;
+
+        firstLetterOfName = listOfContacts[0].GetName()[0];
         htmlNavigation.AppendChild(CTML::Node("a.nav-link",std::string(1,firstLetterOfName))
         .SetAttribute("href","#letter" + std::string(1,firstLetterOfName)));
+        htmlContainerForAllContacts.AppendChild(CTML::Node("h1.mt-3",std::string(1,firstLetterOfName))
+        .SetAttribute("id","letter" + std::string(1,firstLetterOfName)));
+        htmlRowOfContacts = new CTML::Node("div.row");
+
         for(std::vector<Contact>::iterator contactIterator = listOfContacts.begin(); contactIterator != listOfContacts.end(); 
         ++contactIterator)
         {
-            if(firstLetterOfName != (*contactIterator).GetName()[0])
+            if(firstLetterOfName == (*contactIterator).GetName()[0])
             {
-                HtmlFinalizePanelForContactsGroup(htmlContainerForAllContacts,htmlPanelForContactsGroup,
-                htmlPanelHeadingForInitialLetter,htmlPanelBodyForRowsOfContacts,htmlRowOfContacts);
-                contactIndex = 0;
+                (*htmlRowOfContacts).AppendChild(HtmlGetContactNode(contactIterator,directoryPathForSmsPerContactDocuments,
+                fileExtensionHtml));
+            }
+            else
+            {
+                htmlContainerForAllContacts.AppendChild(*htmlRowOfContacts);
+
                 firstLetterOfName = (*contactIterator).GetName()[0];
-                HtmlInitializePanelForContactsGroup(firstLetterOfName,htmlPanelForContactsGroup,htmlPanelHeadingForInitialLetter,
-                htmlPanelBodyForRowsOfContacts,htmlRowOfContacts);
                 htmlNavigation.AppendChild(CTML::Node("a.nav-link",std::string(1,firstLetterOfName))
                 .SetAttribute("href","#letter" + std::string(1,firstLetterOfName)));
-            }
-            else if(contactIterator > listOfContacts.begin() && contactIndex % numberOfContactsPerRow == 0)
-            {
-                (*htmlPanelBodyForRowsOfContacts).AppendChild(*htmlRowOfContacts);
+                htmlContainerForAllContacts.AppendChild(CTML::Node("h1.mt-3",std::string(1,firstLetterOfName))
+                .SetAttribute("id","letter" + std::string(1,firstLetterOfName)));
                 htmlRowOfContacts = new CTML::Node("div.row");
-                contactIndex = 0;
-            }
-            (*htmlRowOfContacts).AppendChild(HtmlGetContactNode(contactIterator,directoryPathForSmsPerContactDocuments,
-            fileExtensionHtml));
-            contactIndex++;
-        }
-        HtmlFinalizePanelForContactsGroup(htmlContainerForAllContacts,htmlPanelForContactsGroup,htmlPanelHeadingForInitialLetter,
-        htmlPanelBodyForRowsOfContacts,htmlRowOfContacts);
-        
-        htmlContainerForContactsList.AppendChild(CTML::Node("div.row").AppendChild(htmlContainerForAllContacts));
 
-        return std::pair<CTML::Node,CTML::Node>(htmlNavigation,htmlContainerForContactsList);
+                (*htmlRowOfContacts).AppendChild(HtmlGetContactNode(contactIterator,directoryPathForSmsPerContactDocuments,
+                fileExtensionHtml));
+            }
+        }
+        htmlContainerForAllContacts.AppendChild(*htmlRowOfContacts);
+
+        return std::pair<CTML::Node,CTML::Node>(htmlNavigation,htmlContainerForAllContacts);
     }
     return std::pair<CTML::Node,CTML::Node>();
-}
-
-void UtilsHtml::HtmlInitializePanelForContactsGroup(const char & firstLetterOfName, CTML::Node * & htmlPanelForContactsGroup, 
-CTML::Node * & htmlPanelHeadingForInitialLetter, CTML::Node * & htmlPanelBodyForRowsOfContacts, CTML::Node * & htmlRowOfContacts)
-{
-    htmlPanelForContactsGroup = new CTML::Node("div.card");
-    htmlPanelHeadingForInitialLetter = new CTML::Node("div.card-header");
-    (*htmlPanelHeadingForInitialLetter).AppendChild(CTML::Node("a",std::string(1,firstLetterOfName))
-    .SetAttribute("id","letter" + std::string(1,firstLetterOfName)));
-    htmlPanelBodyForRowsOfContacts = new CTML::Node("div.card-body");
-    htmlRowOfContacts = new CTML::Node("div.row");
-}
-
-void UtilsHtml::HtmlFinalizePanelForContactsGroup(CTML::Node & htmlContainerForAllContacts, 
-CTML::Node * & htmlPanelForContactsGroup, CTML::Node * & htmlPanelHeadingForInitialLetter, 
-CTML::Node * & htmlPanelBodyForRowsOfContacts, CTML::Node * & htmlRowOfContacts)
-{
-    (*htmlPanelBodyForRowsOfContacts).AppendChild(*htmlRowOfContacts);
-    (*htmlPanelForContactsGroup).AppendChild(*htmlPanelHeadingForInitialLetter);
-    (*htmlPanelForContactsGroup).AppendChild(*htmlPanelBodyForRowsOfContacts);
-    htmlContainerForAllContacts.AppendChild(*htmlPanelForContactsGroup);
 }
 
 CTML::Node UtilsHtml::HtmlGetContactNode(const std::vector<Contact>::iterator & contactIterator,
 const std::string & directoryPathForSmsPerContactDocuments, const std::string & fileExtensionHtml)
 {
-    CTML::Node htmlContactNode("div.col");
-    htmlContactNode.AppendChild(CTML::Node("h3",(*contactIterator).GetName()));
+    CTML::Node cardBodyContact("div.card-body");
+    cardBodyContact.AppendChild(CTML::Node("h5.card-title",(*contactIterator).GetName()));
     std::vector<TelephoneNumber> listOfPhoneNumbers = (*contactIterator).GetTelephoneNumbers();
     for(std::vector<TelephoneNumber>::iterator phoneNumberIterator = listOfPhoneNumbers.begin(); 
     phoneNumberIterator != listOfPhoneNumbers.end(); ++phoneNumberIterator)
     {
-        htmlContactNode.AppendChild(CTML::Node("p",HtmlGetTelephoneNumberString(*phoneNumberIterator)));
+        cardBodyContact.AppendChild(CTML::Node("p.card-text",HtmlGetTelephoneNumberString(*phoneNumberIterator)));
     }
     std::vector<std::string> listOfEmails = (*contactIterator).GetEmails();
     for(std::vector<std::string>::iterator emailIterator = listOfEmails.begin(); emailIterator != listOfEmails.end(); 
     ++emailIterator)
     {
-        htmlContactNode.AppendChild(CTML::Node("p",(*emailIterator)));
+        cardBodyContact.AppendChild(CTML::Node("p.card-text",(*emailIterator)));
     }
-    htmlContactNode.AppendChild(GetSmsNode(contactIterator,directoryPathForSmsPerContactDocuments,fileExtensionHtml));
-    return htmlContactNode;
+    cardBodyContact.AppendChild(GetSmsNode(contactIterator,directoryPathForSmsPerContactDocuments,fileExtensionHtml));
+
+    CTML::Node cardContact("div.card");
+    cardContact.AppendChild(CTML::Node("img.card-img-top").SetAttribute("src","./styles/contact-image.png")
+    .SetAttribute("alt",(*contactIterator).GetName() + " image"));
+    cardContact.AppendChild(cardBodyContact);
+    return CTML::Node("div.mt-2.col-6.col-xs-6.col-sm-4.col-md-3.col-lg-3").AppendChild(cardContact);
 }
 
 std::string UtilsHtml::HtmlGetTelephoneNumberString(TelephoneNumber phoneNumber)
@@ -219,9 +204,9 @@ const std::string & directoryPathForSmsPerContactDocuments, const std::string & 
     std::vector<Sms> listOfSms = (*contactIterator).GetListOfSms();
     if(!listOfSms.empty())
     {
-        return CTML::Node("a","View " + std::to_string(listOfSms.size()) + " message(s)").SetAttribute("href",
+        return CTML::Node("a.btn.btn-dark","View " + std::to_string(listOfSms.size()) + " message(s)").SetAttribute("href",
         directoryPathForSmsPerContactDocuments + "/" + (*contactIterator).GetName() + fileExtensionHtml);
     }
     
-    return CTML::Node("p","No messages");
+    return CTML::Node("p.card-text","No messages");
 }

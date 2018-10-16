@@ -16,22 +16,25 @@ class UtilsHtml
         const std::string & characterCodification, const std::string & viewport, 
         const std::string & author, const std::vector<std::string> & styleSheetsPaths, 
         const std::string & title);
-        void HtmlWriteHeaderInDocumentBody(CTML::Document & htmlDocument, const std::string & headerTitle);
-        void HtmlWriteSmsReportResultInDocumentBody(CTML::Document & htmlDocument, const std::string & headerTitle, std::vector<Sms> listOfSms);
-        void HtmlWriteContactsReportResultInDocumentBody(CTML::Document & htmlDocument, const std::string & headerTitle,
+        void HtmlWriteHeaderInDocumentBody(CTML::Document & htmlDocument, 
+        const std::string & headerTitle);
+        void HtmlWriteSmsReportResultInDocumentBody(CTML::Document & htmlDocument, 
+        const std::string & headerTitle, std::vector<Sms> listOfSms);
+        void HtmlWriteContactsReportResultInDocumentBody(CTML::Document & htmlDocument, 
+        const std::string & headerTitle,
+        std::vector<Contact> listOfContacts, const unsigned char & numberOfContactsPerRow, 
+        const std::string & directoryPathForSmsPerContactDocuments, const std::string & fileExtensionHtml);
+        void HtmlWriteScriptsInDocumentBody(CTML::Document & htmlDocument, 
+        const std::vector<std::string> & listOfHtmlScriptsPaths);
+    private:
+        std::string HtmlGetNumberOfObjectsMessage(const unsigned int & numberOfObjects, 
+        const bool & isContactsReportResult);
+        std::pair<CTML::Node,CTML::Node> HtmGetContactsNavigationBarNodeAndContactsListNode(
         std::vector<Contact> listOfContacts, const unsigned char & numberOfContactsPerRow,
         const std::string & directoryPathForSmsPerContactDocuments, const std::string & fileExtensionHtml);
-        void HtmlWriteScriptsInDocumentBody(CTML::Document & htmlDocument, const std::vector<std::string> & listOfHtmlScriptsPaths);
-    private:
-        std::string HtmlGetNumberOfObjectsMessage(const unsigned int & numberOfObjects, const bool & isContactsReportResult);
-        std::pair<CTML::Node,CTML::Node> HtmGetContactsNavigationBarNodeAndContactsListNode(std::vector<Contact> listOfContacts, const unsigned char & numberOfContactsPerRow,
-        const std::string & directoryPathForSmsPerContactDocuments, const std::string & fileExtensionHtml);
-        void HtmlInitializePanelForContactsGroup(const char & firstLetterOfName, CTML::Node * & htmlPanelForContactsGroup, 
-        CTML::Node * & htmlPanelHeadingForInitialLetter, CTML::Node * & htmlPanelBodyForRowsOfContacts, 
-        CTML::Node * & htmlRowOfContacts);
-        void HtmlFinalizePanelForContactsGroup(CTML::Node& htmlContainerForAllContacts, CTML::Node* & htmlPanelForContactsGroup, 
-        CTML::Node* & htmlPanelHeadingForInitialLetter, CTML::Node* & htmlPanelBodyForRowsOfContacts, 
-        CTML::Node* & htmlRowOfContacts);
+        void InitializeAndAppendNodes(char & firstLetterOfName, const std::string & contactName, 
+        CTML::Node & htmlNavigation, CTML::Node & htmlContainerForAllContacts, 
+        CTML::Node * htmlRowOfContacts);
         CTML::Node HtmlGetContactNode(const std::vector<Contact>::iterator & contactIterator,
         const std::string & directoryPathForSmsPerContactDocuments, const std::string & fileExtensionHtml);
         std::string HtmlGetTelephoneNumberString(TelephoneNumber phoneNumber);
