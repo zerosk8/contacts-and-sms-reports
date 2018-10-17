@@ -11,8 +11,8 @@ DIR_OBJ = ./obj
 DIR_SMS_PER_CONTACT_DOCS = ./Sms
 FILE_CONTACTS_HTML = contactsReportResult.html
 FILE_SMS_HTML = smsReportResult.html
-MAIN = phoneContactsReport
-EXE = phoneContactsReport
+MAIN = phone_contacts_report
+EXE = phone_contacts_report
 
 all: $(DIR_OBJ) $(DIR_SMS_PER_CONTACT_DOCS) $(EXE)
 

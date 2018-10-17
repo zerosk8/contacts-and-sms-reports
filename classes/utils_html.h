@@ -16,13 +16,13 @@ class UtilsHtml
         const std::string & characterCodification, const std::string & viewport, 
         const std::string & author, const std::vector<std::string> & styleSheetsPaths, 
         const std::string & title);
-        void HtmlWriteHeaderInDocumentBody(CTML::Document & htmlDocument, 
-        const std::string & headerTitle);
+        void HtmlWriteHeaderInDocumentBody(CTML::Document & htmlDocument, const std::string & headerTitle, 
+        const std::vector<std::pair<std::string,std::string>> & listOfNavigationBarLinksNamesAndUrls, 
+        const unsigned int & indexOfSelectedNavigationBarLink);
         void HtmlWriteSmsReportResultInDocumentBody(CTML::Document & htmlDocument, 
         const std::string & headerTitle, std::vector<Sms> listOfSms);
         void HtmlWriteContactsReportResultInDocumentBody(CTML::Document & htmlDocument, 
-        const std::string & headerTitle,
-        std::vector<Contact> listOfContacts, const unsigned char & numberOfContactsPerRow, 
+        const std::string & headerTitle, std::vector<Contact> listOfContacts, 
         const std::string & directoryPathForSmsPerContactDocuments, const std::string & fileExtensionHtml);
         void HtmlWriteScriptsInDocumentBody(CTML::Document & htmlDocument, 
         const std::vector<std::string> & listOfHtmlScriptsPaths);
@@ -30,8 +30,8 @@ class UtilsHtml
         std::string HtmlGetNumberOfObjectsMessage(const unsigned int & numberOfObjects, 
         const bool & isContactsReportResult);
         std::pair<CTML::Node,CTML::Node> HtmGetContactsNavigationBarNodeAndContactsListNode(
-        std::vector<Contact> listOfContacts, const unsigned char & numberOfContactsPerRow,
-        const std::string & directoryPathForSmsPerContactDocuments, const std::string & fileExtensionHtml);
+        std::vector<Contact> listOfContacts, const std::string & directoryPathForSmsPerContactDocuments, 
+        const std::string & fileExtensionHtml);
         void InitializeAndAppendNodes(char & firstLetterOfName, const std::string & contactName, 
         CTML::Node & htmlNavigation, CTML::Node & htmlContainerForAllContacts, 
         CTML::Node * htmlRowOfContacts);

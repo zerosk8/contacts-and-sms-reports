@@ -38,16 +38,26 @@ const string HTML_SMS_TITLE = "SMS messages";
 const string HTML_CHAR_ENCODING = "UTF-8";
 const string HTML_VIEWPORT = "width=device-width, initial-scale=1, shrink-to-fit=no";
 const string HTML_AUTHOR = "Alejandro Mesa";
-const vector<string> HTML_STYLE_SHEETS_PATHS = {"./styles/bootstrap-4.1.3/css/bootstrap.min.css", 
-"./styles/stylesheet.css"};
-const vector<string> HTML_SCRIPTS_PATHS = {"./styles/jquery-3.3.1.min.js","./styles/popper-1.14.4.min.js",
-"./styles/bootstrap-4.1.3/js/bootstrap.min.js"};
+const vector<string> HTML_STYLE_SHEETS_PATHS_FROM_ROOT_DIR = 
+{ "./styles/bootstrap-4.1.3/css/bootstrap.min.css", "./styles/stylesheet.css" };
+const vector<string> HTML_SCRIPTS_PATHS_FROM_ROOT_DIR = 
+{"./styles/jquery-3.3.1.min.js","./styles/popper-1.14.4.min.js", 
+"./styles/bootstrap-4.1.3/js/bootstrap.min.js" };
+const vector<string> HTML_STYLE_SHEETS_PATHS_FROM_SMS_PER_CONTACT_DIR = 
+{ "../styles/bootstrap-4.1.3/css/bootstrap.min.css", "../styles/stylesheet.css" };
+const vector<string> HTML_SCRIPTS_PATHS_FROM_SMS_PER_CONTACT_DIR = 
+{"../styles/jquery-3.3.1.min.js","../styles/popper-1.14.4.min.js", 
+"../styles/bootstrap-4.1.3/js/bootstrap.min.js" };
 const string DIR_PATH_FOR_SMS_PER_CONTACT_DOCUMENTS = "./Sms";
 const string FILE_EXTENSION_HTML = ".html";
 const string FILE_CONTACTS_REPORT_RESULT = "contactsReportResult" + FILE_EXTENSION_HTML;
 const string FILE_SMS_REPORT_RESULT = "smsReportResult" + FILE_EXTENSION_HTML;
-const unsigned char NUMBER_OF_COLUMNS_TABLE = 4;
-const unsigned char NUMBER_OF_CONTACTS_PER_ROW = 4;
+const vector<pair<string,string>> HTML_NAVIGATION_BAR_BUTTON_NAMES_AND_LINKS_FROM_ROOT_DIR = 
+{ pair<string,string>("Contacts", FILE_CONTACTS_REPORT_RESULT), 
+pair<string,string>("Messages", FILE_SMS_REPORT_RESULT) };
+const vector<pair<string,string>> HTML_NAVIGATION_BAR_BUTTON_NAMES_AND_LINKS_FROM_SMS_PER_CONTACT_DIR = 
+{ pair<string,string>("Contacts", "../" + FILE_CONTACTS_REPORT_RESULT), 
+pair<string,string>("Messages", "../" + FILE_SMS_REPORT_RESULT) };
 static UtilsHtml UTILS_HTML;
 
 signed char GetValueIndexOfOptionFromProgramArguments(int numberOfProgramArguments, char ** programArguments, 
@@ -89,9 +99,7 @@ void SwapLeftAndRightElementsOfList(vector<Contact> & listOfContacts);
 void RemoveDuplicatedTelephoneNumbers(vector<Contact> & listOfContacts);
 string GetNumberOfObjectsString(const string & title, const unsigned int & numberOfObjects);
 void SaveEachSmsIntoEachContactListOfSms(vector<Contact> & listOfContacts, vector<Sms> listOfSms);
-void CreateSmsPerContactDocuments(vector<Contact> listOfContacts, const string & characterCodification, 
-const string & viewPort, const string & author, const vector<string> & styleSheetsPaths, 
-const string & title, const string & smsDirectoryPath, const string & htmlFileExtension);
+void CreateSmsPerContactDocuments(vector<Contact> listOfContacts);
 
 int main(int argc, char ** argv)
 {
@@ -126,10 +134,11 @@ int main(int argc, char ** argv)
         file.close();
         Document smsHtmlDocument;
         UTILS_HTML.HtmlWriteDocumentHead(smsHtmlDocument,HTML_CHAR_ENCODING,HTML_VIEWPORT,HTML_AUTHOR,
-        HTML_STYLE_SHEETS_PATHS,HTML_DOCUMENT_HEAD_TITLE);
-        UTILS_HTML.HtmlWriteHeaderInDocumentBody(smsHtmlDocument,HTML_DOCUMENT_HEAD_TITLE);
+        HTML_STYLE_SHEETS_PATHS_FROM_ROOT_DIR,HTML_DOCUMENT_HEAD_TITLE);
+        UTILS_HTML.HtmlWriteHeaderInDocumentBody(smsHtmlDocument,HTML_DOCUMENT_HEAD_TITLE,
+        HTML_NAVIGATION_BAR_BUTTON_NAMES_AND_LINKS_FROM_ROOT_DIR,1);
         UTILS_HTML.HtmlWriteSmsReportResultInDocumentBody(smsHtmlDocument,HTML_SMS_TITLE,listOfSms);
-        UTILS_HTML.HtmlWriteScriptsInDocumentBody(smsHtmlDocument,HTML_SCRIPTS_PATHS);
+        UTILS_HTML.HtmlWriteScriptsInDocumentBody(smsHtmlDocument,HTML_SCRIPTS_PATHS_FROM_ROOT_DIR);
         if(!WriteHtmlDocumentToReportResultFile(smsHtmlDocument,FILE_SMS_REPORT_RESULT,
         "Error: Could not open the sms report result file"))
         {
@@ -181,17 +190,16 @@ int main(int argc, char ** argv)
         if(!listOfSms.empty())
         {
             SaveEachSmsIntoEachContactListOfSms(listOfContacts,listOfSms);
-            CreateSmsPerContactDocuments(listOfContacts,HTML_CHAR_ENCODING,HTML_VIEWPORT,HTML_AUTHOR,
-            HTML_STYLE_SHEETS_PATHS,HTML_DOCUMENT_HEAD_TITLE,DIR_PATH_FOR_SMS_PER_CONTACT_DOCUMENTS,
-            FILE_EXTENSION_HTML);
+            CreateSmsPerContactDocuments(listOfContacts);
         }
         Document contactsHtmlDocument;
         UTILS_HTML.HtmlWriteDocumentHead(contactsHtmlDocument,HTML_CHAR_ENCODING,HTML_VIEWPORT,HTML_AUTHOR,
-        HTML_STYLE_SHEETS_PATHS,HTML_DOCUMENT_HEAD_TITLE);
-        UTILS_HTML.HtmlWriteHeaderInDocumentBody(contactsHtmlDocument,HTML_DOCUMENT_HEAD_TITLE);
-        UTILS_HTML.HtmlWriteContactsReportResultInDocumentBody(contactsHtmlDocument,HTML_CONTACTS_TITLE,listOfContacts,
-        NUMBER_OF_CONTACTS_PER_ROW,DIR_PATH_FOR_SMS_PER_CONTACT_DOCUMENTS,FILE_EXTENSION_HTML);
-        UTILS_HTML.HtmlWriteScriptsInDocumentBody(contactsHtmlDocument,HTML_SCRIPTS_PATHS);
+        HTML_STYLE_SHEETS_PATHS_FROM_ROOT_DIR,HTML_DOCUMENT_HEAD_TITLE);
+        UTILS_HTML.HtmlWriteHeaderInDocumentBody(contactsHtmlDocument,HTML_DOCUMENT_HEAD_TITLE,
+        HTML_NAVIGATION_BAR_BUTTON_NAMES_AND_LINKS_FROM_ROOT_DIR,0);
+        UTILS_HTML.HtmlWriteContactsReportResultInDocumentBody(contactsHtmlDocument,HTML_CONTACTS_TITLE,
+        listOfContacts,DIR_PATH_FOR_SMS_PER_CONTACT_DOCUMENTS,FILE_EXTENSION_HTML);
+        UTILS_HTML.HtmlWriteScriptsInDocumentBody(contactsHtmlDocument,HTML_SCRIPTS_PATHS_FROM_ROOT_DIR);
         if(!WriteHtmlDocumentToReportResultFile(contactsHtmlDocument,FILE_CONTACTS_REPORT_RESULT,
         "Error: Could not open the contacts report result file"))
         {
@@ -559,9 +567,7 @@ void SaveEachSmsIntoEachContactListOfSms(vector<Contact> & listOfContacts, vecto
     }
 }
 
-void CreateSmsPerContactDocuments(vector<Contact> listOfContacts, const string & characterCodification, 
-const string & viewPort, const string & author, const vector<string> & styleSheetsPaths, 
-const string & title, const string & smsDirectoryPath, const string & htmlFileExtension)
+void CreateSmsPerContactDocuments(vector<Contact> listOfContacts)
 {
     std::vector<Sms> listOfSms;
     for(std::vector<Contact>::iterator listOfContactsIterator = listOfContacts.begin();
@@ -570,13 +576,18 @@ const string & title, const string & smsDirectoryPath, const string & htmlFileEx
         listOfSms = (*listOfContactsIterator).GetListOfSms();
         if(!listOfSms.empty())
         {
-            std::string contactName = (*listOfContactsIterator).GetName(), documentTitle = contactName + " " + title;
+            std::string contactName = (*listOfContactsIterator).GetName();
             CTML::Document htmlDocument;
-            UTILS_HTML.HtmlWriteDocumentHead(htmlDocument,characterCodification,viewPort,author,
-            styleSheetsPaths,documentTitle);
-
-            UTILS_HTML.HtmlWriteSmsReportResultInDocumentBody(htmlDocument,documentTitle,(*listOfContactsIterator).GetListOfSms());
-            htmlDocument.WriteToFile(smsDirectoryPath + "/" + contactName + htmlFileExtension,Readability::MULTILINE);
+            UTILS_HTML.HtmlWriteDocumentHead(htmlDocument,HTML_CHAR_ENCODING,HTML_VIEWPORT,HTML_AUTHOR,
+            HTML_STYLE_SHEETS_PATHS_FROM_SMS_PER_CONTACT_DIR,HTML_DOCUMENT_HEAD_TITLE);
+            UTILS_HTML.HtmlWriteHeaderInDocumentBody(htmlDocument,HTML_DOCUMENT_HEAD_TITLE,
+            HTML_NAVIGATION_BAR_BUTTON_NAMES_AND_LINKS_FROM_SMS_PER_CONTACT_DIR,-1);
+            UTILS_HTML.HtmlWriteSmsReportResultInDocumentBody(htmlDocument,
+            contactName + " " + HTML_SMS_TITLE,(*listOfContactsIterator).GetListOfSms());
+            UTILS_HTML.HtmlWriteScriptsInDocumentBody(htmlDocument,
+            HTML_SCRIPTS_PATHS_FROM_SMS_PER_CONTACT_DIR);
+            htmlDocument.WriteToFile(DIR_PATH_FOR_SMS_PER_CONTACT_DOCUMENTS + "/" + contactName + 
+            FILE_EXTENSION_HTML,Readability::MULTILINE);
         }
     }
 }
