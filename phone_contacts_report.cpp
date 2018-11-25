@@ -4,6 +4,7 @@
 #include <vector>
 #include "contact.h"
 #include "utils_html.h"
+#include "utils_file_system.h"
 #include "CTML.h"
 
 using namespace std;
@@ -11,6 +12,7 @@ using namespace CTML;
 
 const string PROGRAM_OPTIONS_FOR_CONTACTS_FILE_LOADING = "-c --contacts";
 const string PROGRAM_OPTIONS_FOR_SMS_FILE_LOADING = "-s --sms";
+const string PROGRAM_OPTIONS_FOR_OUTPUT_PATH = "-o --output";
 const string CONTACT_START_LINE_KEYWORD = "BEGIN";
 const string CONTACT_END_LINE_KEYWORD = "END";
 const string CONTACT_NAME_LINE_KEYWORD = "FN";
@@ -32,6 +34,14 @@ const string COUNTRY_DIAL_CODE_START = "+";
 const unsigned int COUNTRY_DIAL_CODE_MAX_LENGTH = 3;
 const char BLANK_CHAR = ' ';
 const string WHITE_SPACES_CHARS = " \t\r\n";
+const string DIR_NAME_FOR_STYLES = "styles";
+const string DIR_NAME_FOR_REPORT_RESULTS = "PhoneContactsSmsReportsResults";
+const string DIR_NAME_FOR_SMS_PER_CONTACT_DOCUMENTS = "Sms";
+const vector<string> DIR_CONTENT_STYLES = {"bootstrap.min.css", "stylesheet.css", "jquery.min.js", 
+"popper.min.js", "bootstrap.min.js", "contact-image.png"};
+const string FILE_EXTENSION_HTML = ".html";
+const string FILE_CONTACTS_REPORT_RESULT = "contactsReportResult" + FILE_EXTENSION_HTML;
+const string FILE_SMS_REPORT_RESULT = "smsReportResult" + FILE_EXTENSION_HTML;
 const string HTML_DOCUMENT_HEAD_TITLE = "Phone Contacts Report";
 const string HTML_CONTACTS_TITLE = "Telephone contacts";
 const string HTML_SMS_TITLE = "SMS messages";
@@ -39,19 +49,17 @@ const string HTML_CHAR_ENCODING = "UTF-8";
 const string HTML_VIEWPORT = "width=device-width, initial-scale=1, shrink-to-fit=no";
 const string HTML_AUTHOR = "Alejandro Mesa";
 const vector<string> HTML_STYLE_SHEETS_PATHS_FROM_ROOT_DIR = 
-{ "./styles/bootstrap-4.1.3/css/bootstrap.min.css", "./styles/stylesheet.css" };
+{ "./" + DIR_NAME_FOR_STYLES + "/" + DIR_CONTENT_STYLES[0], 
+"./" + DIR_NAME_FOR_STYLES + "/" + DIR_CONTENT_STYLES[1]};
 const vector<string> HTML_SCRIPTS_PATHS_FROM_ROOT_DIR = 
-{"./styles/jquery-3.3.1.min.js","./styles/popper-1.14.4.min.js", 
-"./styles/bootstrap-4.1.3/js/bootstrap.min.js" };
+{"./" + DIR_NAME_FOR_STYLES + "/" + DIR_CONTENT_STYLES[2],"./" + DIR_NAME_FOR_STYLES + "/" + DIR_CONTENT_STYLES[3], 
+"./" + DIR_NAME_FOR_STYLES + "/" + DIR_CONTENT_STYLES[4]};
 const vector<string> HTML_STYLE_SHEETS_PATHS_FROM_SMS_PER_CONTACT_DIR = 
-{ "../styles/bootstrap-4.1.3/css/bootstrap.min.css", "../styles/stylesheet.css" };
+{ "../" + DIR_NAME_FOR_STYLES + "/" + DIR_CONTENT_STYLES[0], 
+"../" + DIR_NAME_FOR_STYLES + "/" + DIR_CONTENT_STYLES[1]};
 const vector<string> HTML_SCRIPTS_PATHS_FROM_SMS_PER_CONTACT_DIR = 
-{"../styles/jquery-3.3.1.min.js","../styles/popper-1.14.4.min.js", 
-"../styles/bootstrap-4.1.3/js/bootstrap.min.js" };
-const string DIR_PATH_FOR_SMS_PER_CONTACT_DOCUMENTS = "./Sms";
-const string FILE_EXTENSION_HTML = ".html";
-const string FILE_CONTACTS_REPORT_RESULT = "contactsReportResult" + FILE_EXTENSION_HTML;
-const string FILE_SMS_REPORT_RESULT = "smsReportResult" + FILE_EXTENSION_HTML;
+{"../" + DIR_NAME_FOR_STYLES + "/" + DIR_CONTENT_STYLES[2],"../" + DIR_NAME_FOR_STYLES + "/" + DIR_CONTENT_STYLES[3], 
+"../" + DIR_NAME_FOR_STYLES + "/" + DIR_CONTENT_STYLES[4]};
 const vector<pair<string,string>> HTML_NAVIGATION_BAR_BUTTON_NAMES_AND_LINKS_FROM_ROOT_DIR = 
 { pair<string,string>("Contacts", FILE_CONTACTS_REPORT_RESULT), 
 pair<string,string>("Messages", FILE_SMS_REPORT_RESULT) };
@@ -59,10 +67,13 @@ const vector<pair<string,string>> HTML_NAVIGATION_BAR_BUTTON_NAMES_AND_LINKS_FRO
 { pair<string,string>("Contacts", "../" + FILE_CONTACTS_REPORT_RESULT), 
 pair<string,string>("Messages", "../" + FILE_SMS_REPORT_RESULT) };
 static UtilsHtml UTILS_HTML;
+static UtilsFileSystem UTILS_FILE_SYSTEM;
 
-signed char GetValueIndexOfOptionFromProgramArguments(int numberOfProgramArguments, char ** programArguments, 
-const string & programOption);
-bool OpenFile(ifstream & file, char * fileName, const string & errorMessageAtFailedOpenFile = "Error: Could not open the file");
+string GetDestinationPathForReportsResults(const int & numberOfProgramArguments, 
+char ** programArguments);
+signed char GetOptionIndexFromProgramArguments(const int & numberOfProgramArguments, 
+char ** programArguments, const string & programOption);
+bool CheckAndCreateReportsResultsDirectoriesStructure(const string & destinationPathForReportsResults);
 bool WriteHtmlDocumentToReportResultFile(const Document & htmlDocument, const string & reportResultFileName, 
 const string & errorMessageAtFailedOpenFile = "Error: Could not open the report result file");
 void InitializeContactInformation(string & contactName, vector<TelephoneNumber> & contactPhoneNumbers, 
@@ -99,7 +110,7 @@ void SwapLeftAndRightElementsOfList(vector<Contact> & listOfContacts);
 void RemoveDuplicatedTelephoneNumbers(vector<Contact> & listOfContacts);
 string GetNumberOfObjectsString(const string & title, const unsigned int & numberOfObjects);
 void SaveEachSmsIntoEachContactListOfSms(vector<Contact> & listOfContacts, vector<Sms> listOfSms);
-void CreateSmsPerContactDocuments(vector<Contact> listOfContacts);
+void CreateSmsPerContactDocuments(const string & directoryPath, vector<Contact> listOfContacts);
 
 int main(int argc, char ** argv)
 {
@@ -112,11 +123,16 @@ int main(int argc, char ** argv)
     vector<string> contactEmails;
     vector<Contact> listOfContacts;
     vector<Sms> listOfSms;
+    string destinationPathForReportsResults;
     
-    if((indexInProgramArguments = GetValueIndexOfOptionFromProgramArguments(argc,argv,PROGRAM_OPTIONS_FOR_SMS_FILE_LOADING)) != -1)
+    destinationPathForReportsResults = GetDestinationPathForReportsResults(argc,argv);
+    if((indexInProgramArguments = GetOptionIndexFromProgramArguments(argc,argv,
+    PROGRAM_OPTIONS_FOR_SMS_FILE_LOADING)) != -1)
     {
-        if(!OpenFile(file,argv[indexInProgramArguments],"Error: Could not open the sms file"))
+        if(!UTILS_FILE_SYSTEM.OpenDestinationFile(file,argv[indexInProgramArguments]))
         {
+            cerr << "Error: Could not open the sms file" << endl;
+            cerr << "Error: " << strerror(errno) << endl;
             return -1;
         }
         while(!file.eof())
@@ -139,16 +155,24 @@ int main(int argc, char ** argv)
         HTML_NAVIGATION_BAR_BUTTON_NAMES_AND_LINKS_FROM_ROOT_DIR,1);
         UTILS_HTML.HtmlWriteSmsReportResultInDocumentBody(smsHtmlDocument,HTML_SMS_TITLE,listOfSms);
         UTILS_HTML.HtmlWriteScriptsInDocumentBody(smsHtmlDocument,HTML_SCRIPTS_PATHS_FROM_ROOT_DIR);
-        if(!WriteHtmlDocumentToReportResultFile(smsHtmlDocument,FILE_SMS_REPORT_RESULT,
+        if(!CheckAndCreateReportsResultsDirectoriesStructure(destinationPathForReportsResults))
+        {
+            return -1;
+        }
+        if(!WriteHtmlDocumentToReportResultFile(smsHtmlDocument,UTILS_FILE_SYSTEM.
+        GetFileOrDirectoryPathString(destinationPathForReportsResults,FILE_SMS_REPORT_RESULT),
         "Error: Could not open the sms report result file"))
         {
             return -1;
         }
     }
-    if((indexInProgramArguments = GetValueIndexOfOptionFromProgramArguments(argc,argv,PROGRAM_OPTIONS_FOR_CONTACTS_FILE_LOADING)) != -1)
+    if((indexInProgramArguments = GetOptionIndexFromProgramArguments(argc,argv,
+    PROGRAM_OPTIONS_FOR_CONTACTS_FILE_LOADING)) != -1)
     {
-        if(!OpenFile(file,argv[indexInProgramArguments],"Error: Could not open the contacts file"))
+        if(!UTILS_FILE_SYSTEM.OpenDestinationFile(file,argv[indexInProgramArguments]))
         {
+            cerr << "Error: Could not open the contacts file" << endl;
+            cerr << "Error: " << strerror(errno) << endl;
             return -1;
         }
         while(!file.eof())
@@ -189,8 +213,20 @@ int main(int argc, char ** argv)
         RemoveDuplicatedTelephoneNumbers(listOfContacts);
         if(!listOfSms.empty())
         {
+            string directoryPathForSmsPerContactDocuments = UTILS_FILE_SYSTEM.
+            GetFileOrDirectoryPathString(destinationPathForReportsResults,DIR_NAME_FOR_SMS_PER_CONTACT_DOCUMENTS);
             SaveEachSmsIntoEachContactListOfSms(listOfContacts,listOfSms);
-            CreateSmsPerContactDocuments(listOfContacts);
+            if(!UTILS_FILE_SYSTEM.ExistsDirectoryPath(directoryPathForSmsPerContactDocuments))
+            {
+                if(!UTILS_FILE_SYSTEM.CreateDirectoryPath(directoryPathForSmsPerContactDocuments))
+                {
+                    cerr << "Error: Could not create the directory for the sms per contact documents" 
+                    << endl;
+                    cerr << "Error: " << strerror(errno) << endl;
+                    return -1;
+                }
+            }
+            CreateSmsPerContactDocuments(directoryPathForSmsPerContactDocuments,listOfContacts);
         }
         Document contactsHtmlDocument;
         UTILS_HTML.HtmlWriteDocumentHead(contactsHtmlDocument,HTML_CHAR_ENCODING,HTML_VIEWPORT,HTML_AUTHOR,
@@ -198,9 +234,15 @@ int main(int argc, char ** argv)
         UTILS_HTML.HtmlWriteHeaderInDocumentBody(contactsHtmlDocument,HTML_DOCUMENT_HEAD_TITLE,
         HTML_NAVIGATION_BAR_BUTTON_NAMES_AND_LINKS_FROM_ROOT_DIR,0);
         UTILS_HTML.HtmlWriteContactsReportResultInDocumentBody(contactsHtmlDocument,HTML_CONTACTS_TITLE,
-        listOfContacts,DIR_PATH_FOR_SMS_PER_CONTACT_DOCUMENTS,FILE_EXTENSION_HTML);
+        listOfContacts,UTILS_FILE_SYSTEM.GetFileOrDirectoryPathString(destinationPathForReportsResults,DIR_NAME_FOR_SMS_PER_CONTACT_DOCUMENTS),
+        FILE_EXTENSION_HTML);
         UTILS_HTML.HtmlWriteScriptsInDocumentBody(contactsHtmlDocument,HTML_SCRIPTS_PATHS_FROM_ROOT_DIR);
-        if(!WriteHtmlDocumentToReportResultFile(contactsHtmlDocument,FILE_CONTACTS_REPORT_RESULT,
+        if(!CheckAndCreateReportsResultsDirectoriesStructure(destinationPathForReportsResults))
+        {
+            return -1;
+        }
+        if(!WriteHtmlDocumentToReportResultFile(contactsHtmlDocument,UTILS_FILE_SYSTEM.
+        GetFileOrDirectoryPathString(destinationPathForReportsResults,FILE_CONTACTS_REPORT_RESULT),
         "Error: Could not open the contacts report result file"))
         {
             return -1;
@@ -210,8 +252,25 @@ int main(int argc, char ** argv)
 
 /**************************************/
 
-signed char GetValueIndexOfOptionFromProgramArguments(int numberOfProgramArguments, char ** programArguments, 
-const string & programOption)
+string GetDestinationPathForReportsResults(const int & numberOfProgramArguments, char ** programArguments)
+{
+    signed char indexInProgramArguments;
+    if((indexInProgramArguments = GetOptionIndexFromProgramArguments(numberOfProgramArguments,
+    programArguments,PROGRAM_OPTIONS_FOR_OUTPUT_PATH)) != -1)
+    {
+        return UTILS_FILE_SYSTEM.
+        GetFileOrDirectoryPathString(string(programArguments[indexInProgramArguments]),
+        DIR_NAME_FOR_REPORT_RESULTS);
+    }
+    else
+    {
+        return UTILS_FILE_SYSTEM.GetFileOrDirectoryPathString(UTILS_FILE_SYSTEM.GetCurrentDirectoryPath(),
+        DIR_NAME_FOR_REPORT_RESULTS);
+    }
+}
+
+signed char GetOptionIndexFromProgramArguments(const int & numberOfProgramArguments, 
+char ** programArguments, const string & programOption)
 {
     signed char argumentIndex = 0;
     bool contactsOptionFound = false;
@@ -228,14 +287,51 @@ const string & programOption)
     return -1;
 }
 
-bool OpenFile(ifstream & file, char * fileName, const string & errorMessageAtFailedOpenFile)
+bool CheckAndCreateReportsResultsDirectoriesStructure(const string & destinationPathForReportsResults)
 {
-    file.open(fileName,ios::in);
-    if(file.fail())
+    string originPathForStyles = UTILS_FILE_SYSTEM.GetFileOrDirectoryPathString(".",
+    DIR_NAME_FOR_STYLES);
+    string destinationPathForStyles = UTILS_FILE_SYSTEM.
+    GetFileOrDirectoryPathString(destinationPathForReportsResults,DIR_NAME_FOR_STYLES);
+    if(!UTILS_FILE_SYSTEM.ExistsDirectoryPath(destinationPathForReportsResults))
     {
-        cerr << errorMessageAtFailedOpenFile << endl;
-        cerr << "Error: " << strerror(errno) << endl;
-        return false;
+        if(!UTILS_FILE_SYSTEM.CreateDirectoryPath(destinationPathForReportsResults))
+        {
+            cerr << "Error: Could not create the directory for the reports results" << endl;
+            cerr << "Error: " << strerror(errno) << endl;
+            return false;
+        }
+        if(!UTILS_FILE_SYSTEM.CreateDirectoryPath(destinationPathForStyles))
+        {
+            cerr << "Error: Could not create the directory for the styles" << endl;
+            cerr << "Error: " << strerror(errno) << endl;
+            return false;
+        }
+    }
+    else
+    {
+        if(!UTILS_FILE_SYSTEM.ExistsDirectoryPath(destinationPathForStyles))
+        {
+            if(!UTILS_FILE_SYSTEM.CreateDirectoryPath(destinationPathForStyles))
+            {
+                cerr << "Error: Could not create the directory for the styles" << endl;
+                cerr << "Error: " << strerror(errno) << endl;
+                return false;
+            }
+        }
+    }
+    for(vector<string>::const_iterator fileNameIterator = DIR_CONTENT_STYLES.begin(); 
+    fileNameIterator != DIR_CONTENT_STYLES.end(); ++fileNameIterator)
+    {
+        if(!UTILS_FILE_SYSTEM.CopyFile(UTILS_FILE_SYSTEM.GetFileOrDirectoryPathString(originPathForStyles,
+        *fileNameIterator),UTILS_FILE_SYSTEM.GetFileOrDirectoryPathString(destinationPathForStyles,
+        *fileNameIterator)))
+        {
+            cerr << "Error: Could not copy the file '" + *fileNameIterator + 
+            "' in styles destination folder" << endl;
+            cerr << "Error: " << strerror(errno) << endl;
+            return false;
+        }
     }
     return true;
 }
@@ -567,7 +663,7 @@ void SaveEachSmsIntoEachContactListOfSms(vector<Contact> & listOfContacts, vecto
     }
 }
 
-void CreateSmsPerContactDocuments(vector<Contact> listOfContacts)
+void CreateSmsPerContactDocuments(const string & directoryPath, vector<Contact> listOfContacts)
 {
     std::vector<Sms> listOfSms;
     for(std::vector<Contact>::iterator listOfContactsIterator = listOfContacts.begin();
@@ -586,8 +682,8 @@ void CreateSmsPerContactDocuments(vector<Contact> listOfContacts)
             contactName + " " + HTML_SMS_TITLE,(*listOfContactsIterator).GetListOfSms());
             UTILS_HTML.HtmlWriteScriptsInDocumentBody(htmlDocument,
             HTML_SCRIPTS_PATHS_FROM_SMS_PER_CONTACT_DIR);
-            htmlDocument.WriteToFile(DIR_PATH_FOR_SMS_PER_CONTACT_DOCUMENTS + "/" + contactName + 
-            FILE_EXTENSION_HTML,Readability::MULTILINE);
+            htmlDocument.WriteToFile(UTILS_FILE_SYSTEM.GetFileOrDirectoryPathString(directoryPath,contactName + FILE_EXTENSION_HTML),
+            Readability::MULTILINE);
         }
     }
 }

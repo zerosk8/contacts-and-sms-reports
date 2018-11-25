@@ -3,6 +3,7 @@
     border: 1px solid;
     color: white;
 }
+
 #idNavigationBar a.nav-link.active
 {
     background: white;
