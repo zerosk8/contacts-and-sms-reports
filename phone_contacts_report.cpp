@@ -69,6 +69,8 @@ pair<string,string>("Messages", "../" + FILE_SMS_REPORT_RESULT) };
 static UtilsHtml UTILS_HTML;
 static UtilsFileSystem UTILS_FILE_SYSTEM;
 
+bool IsContactsOptionInProgramArguments(const int & numberOfProgramArguments, char ** programArguments);
+bool IsSmsOptionInProgramArguments(const int & numberOfProgramArguments, char ** programArguments);
 string GetDestinationPathForReportsResults(const int & numberOfProgramArguments, 
 char ** programArguments);
 signed char GetOptionIndexFromProgramArguments(const int & numberOfProgramArguments, 
@@ -114,7 +116,6 @@ void CreateSmsPerContactDocuments(const string & directoryPath, vector<Contact> 
 
 int main(int argc, char ** argv)
 {
-    signed char indexInProgramArguments;
     ifstream file;
     string fileLine;
     bool beginOfContact = false;
@@ -123,13 +124,18 @@ int main(int argc, char ** argv)
     vector<string> contactEmails;
     vector<Contact> listOfContacts;
     vector<Sms> listOfSms;
+    bool isSmsOptionInProgramArguments, isContactsOptionInProgramArguments;
     string destinationPathForReportsResults;
+    vector<pair<string,string>> navigationBarButtonsNamesAndLinks = 
+    HTML_NAVIGATION_BAR_BUTTON_NAMES_AND_LINKS_FROM_ROOT_DIR;
     
+    isSmsOptionInProgramArguments = IsSmsOptionInProgramArguments(argc,argv);
+    isContactsOptionInProgramArguments = IsContactsOptionInProgramArguments(argc,argv);
     destinationPathForReportsResults = GetDestinationPathForReportsResults(argc,argv);
-    if((indexInProgramArguments = GetOptionIndexFromProgramArguments(argc,argv,
-    PROGRAM_OPTIONS_FOR_SMS_FILE_LOADING)) != -1)
+    if(isSmsOptionInProgramArguments)
     {
-        if(!UTILS_FILE_SYSTEM.OpenDestinationFile(file,argv[indexInProgramArguments]))
+        if(!UTILS_FILE_SYSTEM.OpenDestinationFile(file,
+        argv[GetOptionIndexFromProgramArguments(argc,argv,PROGRAM_OPTIONS_FOR_SMS_FILE_LOADING)]))
         {
             cerr << "Error: Could not open the sms file" << endl;
             cerr << "Error: " << strerror(errno) << endl;
@@ -151,8 +157,17 @@ int main(int argc, char ** argv)
         Document smsHtmlDocument;
         UTILS_HTML.HtmlWriteDocumentHead(smsHtmlDocument,HTML_CHAR_ENCODING,HTML_VIEWPORT,HTML_AUTHOR,
         HTML_STYLE_SHEETS_PATHS_FROM_ROOT_DIR,HTML_DOCUMENT_HEAD_TITLE);
-        UTILS_HTML.HtmlWriteHeaderInDocumentBody(smsHtmlDocument,HTML_DOCUMENT_HEAD_TITLE,
-        HTML_NAVIGATION_BAR_BUTTON_NAMES_AND_LINKS_FROM_ROOT_DIR,1);
+        if(isContactsOptionInProgramArguments)
+        {
+            UTILS_HTML.HtmlWriteHeaderInDocumentBody(smsHtmlDocument,HTML_DOCUMENT_HEAD_TITLE,
+            navigationBarButtonsNamesAndLinks,1);
+        }
+        else
+        {
+            navigationBarButtonsNamesAndLinks.erase(navigationBarButtonsNamesAndLinks.begin());
+            UTILS_HTML.HtmlWriteHeaderInDocumentBody(smsHtmlDocument,HTML_DOCUMENT_HEAD_TITLE,
+            navigationBarButtonsNamesAndLinks,0);
+        }
         UTILS_HTML.HtmlWriteSmsReportResultInDocumentBody(smsHtmlDocument,HTML_SMS_TITLE,listOfSms);
         UTILS_HTML.HtmlWriteScriptsInDocumentBody(smsHtmlDocument,HTML_SCRIPTS_PATHS_FROM_ROOT_DIR);
         if(!CheckAndCreateReportsResultsDirectoriesStructure(destinationPathForReportsResults))
@@ -166,10 +181,10 @@ int main(int argc, char ** argv)
             return -1;
         }
     }
-    if((indexInProgramArguments = GetOptionIndexFromProgramArguments(argc,argv,
-    PROGRAM_OPTIONS_FOR_CONTACTS_FILE_LOADING)) != -1)
+    if(isContactsOptionInProgramArguments)
     {
-        if(!UTILS_FILE_SYSTEM.OpenDestinationFile(file,argv[indexInProgramArguments]))
+        if(!UTILS_FILE_SYSTEM.OpenDestinationFile(file,
+        argv[GetOptionIndexFromProgramArguments(argc,argv,PROGRAM_OPTIONS_FOR_CONTACTS_FILE_LOADING)]))
         {
             cerr << "Error: Could not open the contacts file" << endl;
             cerr << "Error: " << strerror(errno) << endl;
@@ -231,8 +246,12 @@ int main(int argc, char ** argv)
         Document contactsHtmlDocument;
         UTILS_HTML.HtmlWriteDocumentHead(contactsHtmlDocument,HTML_CHAR_ENCODING,HTML_VIEWPORT,HTML_AUTHOR,
         HTML_STYLE_SHEETS_PATHS_FROM_ROOT_DIR,HTML_DOCUMENT_HEAD_TITLE);
+        if(!isSmsOptionInProgramArguments)
+        {
+            navigationBarButtonsNamesAndLinks.pop_back();
+        }
         UTILS_HTML.HtmlWriteHeaderInDocumentBody(contactsHtmlDocument,HTML_DOCUMENT_HEAD_TITLE,
-        HTML_NAVIGATION_BAR_BUTTON_NAMES_AND_LINKS_FROM_ROOT_DIR,0);
+        navigationBarButtonsNamesAndLinks,0);
         UTILS_HTML.HtmlWriteContactsReportResultInDocumentBody(contactsHtmlDocument,HTML_CONTACTS_TITLE,
         listOfContacts,UTILS_FILE_SYSTEM.GetFileOrDirectoryPathString(destinationPathForReportsResults,DIR_NAME_FOR_SMS_PER_CONTACT_DOCUMENTS),
         FILE_EXTENSION_HTML);
@@ -251,6 +270,18 @@ int main(int argc, char ** argv)
 }
 
 /**************************************/
+
+bool IsContactsOptionInProgramArguments(const int & numberOfProgramArguments, char ** programArguments)
+{
+    return GetOptionIndexFromProgramArguments(numberOfProgramArguments,programArguments,
+    PROGRAM_OPTIONS_FOR_CONTACTS_FILE_LOADING) != -1;
+}
+
+bool IsSmsOptionInProgramArguments(const int & numberOfProgramArguments, char ** programArguments)
+{
+    return GetOptionIndexFromProgramArguments(numberOfProgramArguments,programArguments,
+    PROGRAM_OPTIONS_FOR_SMS_FILE_LOADING) != -1;
+}
 
 string GetDestinationPathForReportsResults(const int & numberOfProgramArguments, char ** programArguments)
 {
