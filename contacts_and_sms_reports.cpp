@@ -35,19 +35,19 @@ const unsigned int COUNTRY_DIAL_CODE_MAX_LENGTH = 3;
 const char BLANK_CHAR = ' ';
 const string WHITE_SPACES_CHARS = " \t\r\n";
 const string DIR_NAME_FOR_STYLES = "styles";
-const string DIR_NAME_FOR_REPORT_RESULTS = "PhoneContactsSmsReportsResults";
-const string DIR_NAME_FOR_SMS_PER_CONTACT_DOCUMENTS = "Sms";
+const string DIR_NAME_FOR_REPORT_RESULTS = "Contacts and SMS report documents";
+const string DIR_NAME_FOR_SMS_PER_CONTACT_DOCUMENTS = "SMS report documents per contact";
 const vector<string> DIR_CONTENT_STYLES = {"bootstrap.min.css", "stylesheet.css", "jquery.min.js", 
 "popper.min.js", "bootstrap.min.js", "contact-image.png"};
 const string FILE_EXTENSION_HTML = ".html";
-const string FILE_CONTACTS_REPORT_RESULT = "contactsReportResult" + FILE_EXTENSION_HTML;
-const string FILE_SMS_REPORT_RESULT = "smsReportResult" + FILE_EXTENSION_HTML;
-const string HTML_DOCUMENT_HEAD_TITLE = "Phone Contacts Report";
+const string FILE_CONTACTS_REPORT_RESULT = "Contacts report document" + FILE_EXTENSION_HTML;
+const string FILE_SMS_REPORT_RESULT = "SMS messages report document" + FILE_EXTENSION_HTML;
+const string HTML_DOCUMENT_HEAD_TITLE = "Contacts and SMS Reports";
 const string HTML_CONTACTS_TITLE = "Telephone contacts";
 const string HTML_SMS_TITLE = "SMS messages";
 const string HTML_CHAR_ENCODING = "UTF-8";
 const string HTML_VIEWPORT = "width=device-width, initial-scale=1, shrink-to-fit=no";
-const string HTML_AUTHOR = "Alejandro Mesa";
+const string HTML_AUTHOR = "Alejandro Mesa Rodríguez";
 const vector<string> HTML_STYLE_SHEETS_PATHS_FROM_ROOT_DIR = 
 { "./" + DIR_NAME_FOR_STYLES + "/" + DIR_CONTENT_STYLES[0], 
 "./" + DIR_NAME_FOR_STYLES + "/" + DIR_CONTENT_STYLES[1]};

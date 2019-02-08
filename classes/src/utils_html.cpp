@@ -24,7 +24,7 @@ const unsigned int & indexOfSelectedNavigationBarLink)
 {
     CTML::Node htmlBodyHeader("header.container-fluid.bg-dark.text-light.shadow");
     htmlBodyHeader.AppendChild(CTML::Node("div.d-flex.justify-content-center")
-    .AppendChild(CTML::Node("h2.py-2","Phone Contacts Report")));
+    .AppendChild(CTML::Node("h2.py-2",headerTitle)));
     CTML::Node htmlNavigationBarNav("ul.nav.nav-pills.py-3");
     htmlNavigationBarNav.SetAttribute("id","idNavigationBar");
     unsigned int numberOfNavigationBarLinks = listOfNavigationBarLinksNamesAndUrls.size();
@@ -179,7 +179,7 @@ const std::string & directoryPathForSmsPerContactDocuments, const std::string & 
     cardBodyContact.AppendChild(GetSmsNode(contactIterator,directoryPathForSmsPerContactDocuments,fileExtensionHtml));
 
     CTML::Node cardContact("div.card.shadow");
-    cardContact.AppendChild(CTML::Node("img.card-img-top.mx-auto").SetAttribute("src","./styles/contact-image.png")
+    cardContact.AppendChild(CTML::Node("img.card-img-top.mx-auto.mt-3").SetAttribute("src","./styles/contact-image.png")
     .SetAttribute("alt",(*contactIterator).GetName() + " image"));
     cardContact.AppendChild(cardBodyContact);
     return CTML::Node("div.mt-2.col-8.col-xs-8.col-sm-4.col-md-3.col-lg-3").AppendChild(cardContact);

@@ -11,11 +11,8 @@ CLASS_CONTACT = contact
 CLASS_SMS = sms
 CLASS_UTILS_HTML = utils_html
 CLASS_UTILS_FILE_SYSTEM = utils_file_system
-DIR_REPORTS_RESULTS = PhoneContactsSmsReportsResults
-FILE_CONTACTS_HTML = contactsReportResult.html
-FILE_SMS_HTML = smsReportResult.html
-MAIN = phone_contacts_report
-EXE = phone_contacts_report
+MAIN = contacts_and_sms_reports
+EXE = contacts_and_sms_reports
 
 all: $(PATH_CLASSES_OBJ) $(EXE)
 
@@ -47,8 +44,4 @@ $(CLASS_UTILS_FILE_SYSTEM).o: $(PATH_CLASSES_SRC)/$(CLASS_UTILS_FILE_SYSTEM).cpp
     $(PATH_CLASSES_OBJ)/$(CLASS_UTILS_FILE_SYSTEM).o
 
 clean:
-	rm -Rf $(DIR_REPORTS_RESULTS)
-
-clean-all: clean
 	rm -Rf $(EXE) $(PATH_CLASSES_OBJ)
-
