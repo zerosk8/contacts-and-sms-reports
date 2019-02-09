@@ -22,24 +22,20 @@ class GUIContactsAndSmsReports
         GUIContactsAndSmsReports(const Glib::ustring & applicationId);
         void Run();
         ~GUIContactsAndSmsReports();
-    protected:
+    private:
+        Glib::RefPtr<Gtk::Builder> builder;
+        Glib::RefPtr<Gtk::Application> application;
+        Gtk::Window * mainWindow;
+        Gtk::FileChooserButton * contactsFilePathButton, * smsFilePathButton, * destinationPathButton;
+        Gtk::Button * executeButton, * quitButton;
+        ExecContactsAndSmsReports applicationExec;
+
         void ConnectWidgetsEventSignalsToFunctions();
         void OnGUIContactsFilePathButtonFileSetEvent();
         void OnGUISmsFilePathButtonFileSetEvent();
         void OnGUIDestinationPathButtonFileSetEvent();
         void OnGUIExecuteButton();
         void OnGUIQuitButton();
-    private:
-
-        Glib::RefPtr<Gtk::Builder> builder;
-        Glib::RefPtr<Gtk::Application> application;
-        Gtk::Window * mainWindow;
-        Gtk::FileChooserButton * contactsFilePathButton, * smsFilePathButton, * destinationPathButton;
-        Gtk::Button * executeButton, * quitButton;
-
-        std::string contactsFilePath, smsFilePath, destinationPathForReportsResults;
-        
-        ExecContactsAndSmsReports applicationExec;
 };
 
 #endif

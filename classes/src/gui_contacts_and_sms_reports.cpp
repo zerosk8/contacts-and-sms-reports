@@ -39,29 +39,21 @@ void GUIContactsAndSmsReports::ConnectWidgetsEventSignalsToFunctions()
     &GUIContactsAndSmsReports::OnGUIQuitButton));
 }
 
-void GUIContactsAndSmsReports::OnGUIContactsFilePathButtonFileSetEvent()
-{
-    contactsFilePath = contactsFilePathButton->get_filename();
-}
+void GUIContactsAndSmsReports::OnGUIContactsFilePathButtonFileSetEvent(){}
 
-void GUIContactsAndSmsReports::OnGUISmsFilePathButtonFileSetEvent()
-{
-    smsFilePath = smsFilePathButton->get_filename();
-}
+void GUIContactsAndSmsReports::OnGUISmsFilePathButtonFileSetEvent(){}
 
-void GUIContactsAndSmsReports::OnGUIDestinationPathButtonFileSetEvent()
-{
-    destinationPathForReportsResults = UTILS_FILE_SYSTEM.GetFileOrDirectoryPathString
-    (destinationPathButton->get_filename(),DIR_NAME_FOR_REPORT_RESULTS);
-}
+void GUIContactsAndSmsReports::OnGUIDestinationPathButtonFileSetEvent(){}
 
 void GUIContactsAndSmsReports::OnGUIExecuteButton()
 {
-    if((!contactsFilePath.empty() || !smsFilePath.empty()) && !destinationPathForReportsResults.empty())
+    if((!contactsFilePathButton->get_filename().empty() || !smsFilePathButton->get_filename().empty()) 
+    && !destinationPathButton->get_filename().empty())
     {
         std::pair<bool,std::string> applicationExecResult;
-        applicationExec = ExecContactsAndSmsReports(contactsFilePath,smsFilePath,
-        destinationPathForReportsResults);
+        applicationExec = ExecContactsAndSmsReports(contactsFilePathButton->get_filename(),
+        smsFilePathButton->get_filename(),UTILS_FILE_SYSTEM.GetFileOrDirectoryPathString
+        (destinationPathButton->get_filename(),DIR_NAME_FOR_REPORT_RESULTS));
         applicationExecResult = applicationExec.Run();
         if(!applicationExecResult.first)
         {
