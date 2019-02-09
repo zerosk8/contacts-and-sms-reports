@@ -1,13 +1,9 @@
 #include "utils_file_system.h"
 
-bool UtilsFileSystem::OpenDestinationFile(std::ifstream & file, char * fileName)
+bool UtilsFileSystem::OpenDestinationFile(std::ifstream & file, const char * fileName)
 {
     file.open(fileName,std::ios::in);
-    if(file.fail())
-    {
-        return false;
-    }
-    return true;
+    return !file.fail();
 }
 
 bool UtilsFileSystem::CopyFile(const std::string & originFilePath, const std::string & destinationFilePath)
@@ -33,11 +29,7 @@ bool UtilsFileSystem::CopyFile(const std::string & originFilePath, const std::st
 bool UtilsFileSystem::ExistsDirectoryPath(const std::string & directoryPath)
 {
     struct stat directoryInfo;
-    if((stat(directoryPath.c_str(),&directoryInfo) == 0) && (directoryInfo.st_mode & S_IFDIR))
-    {
-        return true;
-    }
-    return false;
+    return ((stat(directoryPath.c_str(),&directoryInfo) == 0) && (directoryInfo.st_mode & S_IFDIR));
 }
 
 bool UtilsFileSystem::CreateDirectoryPath(const std::string & directoryPath)
@@ -58,7 +50,7 @@ bool UtilsFileSystem::CreateDirectoryPath(const std::string & directoryPath)
 
 std::string UtilsFileSystem::GetCurrentDirectoryPath()
 {
-    return ".";
+    return CURRENT_DIRECTORY_PATH;
 }
 
 std::string UtilsFileSystem::GetFileOrDirectoryPathString(const std::string & parentDirectoryPath, 

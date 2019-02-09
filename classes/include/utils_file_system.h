@@ -11,11 +11,12 @@
 
 const char WINDOWS_PATH_DELIMITER = '\\';
 const char UNIX_PATH_DELIMITER = '/';
+const std::string CURRENT_DIRECTORY_PATH = ".";
 
 class UtilsFileSystem
 {
     public:
-        bool OpenDestinationFile(std::ifstream & file, char * fileName);
+        bool OpenDestinationFile(std::ifstream & file, const char * fileName);
         bool CopyFile(const std::string & originFilePath, const std::string & destinationFilePath);
         bool ExistsDirectoryPath(const std::string & directoryPath);
         bool CreateDirectoryPath(const std::string & directoryPath);
