@@ -16,9 +16,9 @@ GUIContactsAndSmsReports::GUIContactsAndSmsReports(const Glib::ustring & applica
     ConnectWidgetsEventSignalsToFunctions();
 }
 
-void GUIContactsAndSmsReports::Run()
+int GUIContactsAndSmsReports::Run()
 {
-    application->run(*mainWindow);
+    return application->run(*mainWindow);
 }
 
 GUIContactsAndSmsReports::~GUIContactsAndSmsReports(){}
@@ -64,5 +64,5 @@ void GUIContactsAndSmsReports::OnGUIExecuteButton()
 
 void GUIContactsAndSmsReports::OnGUIQuitButton()
 {
-    exit(0);
+    mainWindow->close();
 }

@@ -1,8 +1,9 @@
 #ifndef _GUI_CONTACTS_AND_SMS_REPORTS_H_
 #define _GUI_CONTACTS_AND_SMS_REPORTS_H_
-#include <gtkmm/window.h>
-#include <gtkmm/filechooserbutton.h>
 #include <gtkmm/builder.h>
+#include <gtkmm/applicationwindow.h>
+#include <gtkmm/filechooserbutton.h>
+#include <gtkmm/button.h>
 #include <iostream>
 #include <string>
 #include "exec_contacts_and_sms_reports.h"
@@ -20,22 +21,23 @@ class GUIContactsAndSmsReports
     public:
         GUIContactsAndSmsReports();
         GUIContactsAndSmsReports(const Glib::ustring & applicationId);
-        void Run();
+        int Run();
         ~GUIContactsAndSmsReports();
     private:
-        Glib::RefPtr<Gtk::Builder> builder;
-        Glib::RefPtr<Gtk::Application> application;
-        Gtk::Window * mainWindow;
-        Gtk::FileChooserButton * contactsFilePathButton, * smsFilePathButton, * destinationPathButton;
-        Gtk::Button * executeButton, * quitButton;
-        ExecContactsAndSmsReports applicationExec;
-
+        // Signal handlers
         void ConnectWidgetsEventSignalsToFunctions();
         void OnGUIContactsFilePathButtonFileSetEvent();
         void OnGUISmsFilePathButtonFileSetEvent();
         void OnGUIDestinationPathButtonFileSetEvent();
         void OnGUIExecuteButton();
         void OnGUIQuitButton();
+        // Child widgets
+        Glib::RefPtr<Gtk::Builder> builder;
+        Glib::RefPtr<Gtk::Application> application;
+        Gtk::ApplicationWindow * mainWindow;
+        Gtk::FileChooserButton * contactsFilePathButton, * smsFilePathButton, * destinationPathButton;
+        Gtk::Button * executeButton, * quitButton;
+        ExecContactsAndSmsReports applicationExec;
 };
 
 #endif
