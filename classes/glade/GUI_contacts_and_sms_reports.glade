@@ -159,7 +159,7 @@
             <property name="homogeneous">True</property>
             <child>
               <object class="GtkButton" id="GUIQuitButton">
-                <property name="label">gtk-remove</property>
+                <property name="label">gtk-quit</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
