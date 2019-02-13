@@ -8,6 +8,7 @@ std::string smsFilePath, std::string destinationPathForReportsResults)
     this->contactsFilePath = contactsFilePath;
     this->smsFilePath = smsFilePath;
     this->destinationPathForReportsResults = destinationPathForReportsResults;
+    this->setLanguageLocalization(LANGUAGE_LOCALIZATION);
 }
 
 std::pair<bool,std::string> ExecContactsAndSmsReports::ExecContactsAndSmsReports::Run()
@@ -165,6 +166,11 @@ ExecContactsAndSmsReports::~ExecContactsAndSmsReports(){}
 
 /**************************************/
 
+void ExecContactsAndSmsReports::setLanguageLocalization(const std::string & locale)
+{
+    std::setlocale(LC_ALL,locale.c_str());
+}
+
 std::pair<bool,std::string> ExecContactsAndSmsReports::CheckAndCreateReportsResultsDirectoriesStructure
 (const std::string & destinationPathForReportsResults)
 {
@@ -176,7 +182,7 @@ std::pair<bool,std::string> ExecContactsAndSmsReports::CheckAndCreateReportsResu
     {
         if(!UTILS_FILE_SYSTEM.CreateDirectoryPath(destinationPathForReportsResults))
         {
-            return std::pair<bool,std::string>(false,"Error creating the directory for the reports results: " + 
+            return std::pair<bool,std::string>(false,"Error creating the directory for the report results: " + 
             std::string(strerror(errno)));
         }
         if(!UTILS_FILE_SYSTEM.CreateDirectoryPath(destinationPathForStyles))

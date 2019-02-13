@@ -22,8 +22,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_top">5</property>
+            <property name="pixbuf">icons/faenza-gnome-contacts.png</property>
             <property name="pixel_size">0</property>
-            <property name="icon_name">gnome-contacts</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -37,7 +37,7 @@
             <property name="can_focus">False</property>
             <property name="margin_top">10</property>
             <property name="margin_bottom">10</property>
-            <property name="label" translatable="yes">Archivo de contactos (*.vcf, *.vcard)</property>
+            <property name="label" translatable="yes">Contacts file (*.vcf, *.vcard)</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -62,8 +62,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_top">5</property>
+            <property name="pixbuf">icons/faenza-message.png</property>
             <property name="pixel_size">0</property>
-            <property name="icon_name">message</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -77,7 +77,7 @@
             <property name="can_focus">False</property>
             <property name="margin_top">10</property>
             <property name="margin_bottom">10</property>
-            <property name="label" translatable="yes">Archivo de mensajes SMS (*.xml)</property>
+            <property name="label" translatable="yes">SMS messages file (*.xml)</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -116,7 +116,7 @@
             <property name="can_focus">False</property>
             <property name="margin_top">10</property>
             <property name="margin_bottom">10</property>
-            <property name="label" translatable="yes">Directorio destino para los archivos de reportes</property>
+            <property name="label" translatable="yes">Directory path for report results files</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -159,13 +159,12 @@
             <property name="homogeneous">True</property>
             <child>
               <object class="GtkButton" id="GUIQuitButton">
-                <property name="label">gtk-quit</property>
+                <property name="label">Quit</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="margin_left">10</property>
                 <property name="margin_right">10</property>
-                <property name="use_stock">True</property>
                 <property name="always_show_image">True</property>
               </object>
               <packing>
@@ -176,13 +175,12 @@
             </child>
             <child>
               <object class="GtkButton" id="GUIExecuteButton">
-                <property name="label">gtk-execute</property>
+                <property name="label">Run</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="margin_left">10</property>
                 <property name="margin_right">10</property>
-                <property name="use_stock">True</property>
                 <property name="always_show_image">True</property>
               </object>
               <packing>
@@ -196,6 +194,54 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">10</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkMessageDialog" id="GUIMessageDialog">
+    <property name="can_focus">False</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="type_hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox">
+            <property name="can_focus">False</property>
+            <property name="homogeneous">True</property>
+            <property name="layout_style">end</property>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="GUIMessageDialogOkButton">
+            <property name="label" translatable="yes">OK</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="margin_left">20</property>
+            <property name="margin_right">20</property>
+            <property name="margin_top">20</property>
+            <property name="margin_bottom">20</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>

@@ -7,6 +7,7 @@
 #include "utils_html.h"
 #include "utils_file_system.h"
 
+const std::string LANGUAGE_LOCALIZATION = "en_GB.utf8";
 const std::string CONTACT_START_LINE_KEYWORD = "BEGIN";
 const std::string CONTACT_END_LINE_KEYWORD = "END";
 const std::string CONTACT_NAME_LINE_KEYWORD = "FN";
@@ -76,6 +77,7 @@ class ExecContactsAndSmsReports
         std::string smsFilePath;
         std::string destinationPathForReportsResults;
 
+        void setLanguageLocalization(const std::string & locale);
         std::pair<bool,std::string> CheckAndCreateReportsResultsDirectoriesStructure
         (const std::string & destinationPathForReportsResults);
         void InitializeContactInformation(std::string & contactName, 
