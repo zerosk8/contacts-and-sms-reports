@@ -18,11 +18,11 @@ const std::string GLADE_ID_EXECUTE_BUTTON = "GUIExecuteButton";
 const std::string GLADE_ID_QUIT_BUTTON = "GUIQuitButton";
 const std::string GLADE_ID_MESSAGE_DIALOG = "GUIMessageDialog";
 const std::string GLADE_ID_MESSAGE_DIALOG_OK_BUTTON = "GUIMessageDialogOkButton";
+const char MESSAGE_DIALOG_ERROR_TEXT_SEPARATOR_CHAR = ':';
 const std::string MESSAGE_DIALOG_MISSING_INPUT_MESSAGE = "Missing contacts or SMS messages";
 const std::string MESSAGE_DIALOG_MISSING_OUTPUT_MESSAGE = 
 "Missing directory path";
 const std::string MESSAGE_DIALOG_SUCCESS_MESSAGE = "Success";
-const std::string MESSAGE_DIALOG_ERROR_MESSAGE = "Error";
 const std::string MESSAGE_DIALOG_MISSING_INPUT_FILE_TEXT = 
 "Please, select a contacts file and/or a SMS messages file.";
 const std::string MESSAGE_DIALOG_MISSING_OUTPUT_PATH_TEXT = 

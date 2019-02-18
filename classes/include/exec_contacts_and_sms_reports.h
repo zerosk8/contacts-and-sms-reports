@@ -4,8 +4,12 @@
 #include <string>
 #include <vector>
 #include "contact.h"
-#include "utils_html.h"
+#include "utils_string.h"
 #include "utils_file_system.h"
+#include "utils_html.h"
+
+// NOT "using namespace std;" BECAUSE OF THIS
+// https://stackoverflow.com/questions/5527665/why-am-i-getting-string-does-not-name-a-type-error
 
 const std::string LANGUAGE_LOCALIZATION = "en_GB.utf8";
 const std::string CONTACT_START_LINE_KEYWORD = "BEGIN";
@@ -28,7 +32,6 @@ const std::string SMS_FIELD_VALUE_SURROUNDING = "\"";
 const std::string COUNTRY_DIAL_CODE_START = "+";
 const unsigned int COUNTRY_DIAL_CODE_MAX_LENGTH = 3;
 const char BLANK_CHAR = ' ';
-const std::string WHITE_SPACES_CHARS = " \t\r\n";
 const std::string DIR_NAME_FOR_STYLES = "styles";
 const std::string DIR_NAME_FOR_REPORT_RESULTS = "Contacts and SMS report documents";
 const std::string DIR_NAME_FOR_SMS_PER_CONTACT_DOCUMENTS = "SMS report documents per contact";
@@ -61,8 +64,9 @@ std::pair<std::string,std::string>("Messages", FILE_SMS_REPORT_RESULT) };
 const std::vector<std::pair<std::string,std::string>> HTML_NAVIGATION_BAR_BUTTON_NAMES_AND_LINKS_FROM_SMS_PER_CONTACT_DIR = 
 { std::pair<std::string,std::string>("Contacts", "../" + FILE_CONTACTS_REPORT_RESULT), 
 std::pair<std::string,std::string>("Messages", "../" + FILE_SMS_REPORT_RESULT) };
-static UtilsHtml UTILS_HTML;
+static UtilsString UTILS_STRING;
 static UtilsFileSystem UTILS_FILE_SYSTEM;
+static UtilsHtml UTILS_HTML;
 
 class ExecContactsAndSmsReports
 {
@@ -88,8 +92,6 @@ class ExecContactsAndSmsReports
         bool IsLineContactPhoneNumber(const std::string & line);
         bool IsLineEmailAddress(const std::string & line);
         bool IsLineSms(const std::string & line);
-        std::string TrimWhiteSpacesFromStartOfString(const std::string & line);
-        std::string TrimWhiteSpacesFromEndOfString(const std::string & line);
         bool DoLineStartsWithKeyword(const std::string & line, const std::string & keyword);
         bool DoLineEndsWithSmsEndLineKeyWord(const std::string & line);
         std::string GetValueFromContactsFileLine(const std::string & line);
