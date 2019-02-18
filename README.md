@@ -28,28 +28,36 @@ Now you can run the application.
 # Running the application (GNU/Linux, MacOS)
 ## GUI mode
 1. Open a terminal and navigate to the root folder.
-2. Execute the command `$ ./phone_contacts_report`.
+2. Execute the command `$ ./contacts_and_sms_reports`.
 
 ![GUI main window](https://github.com/zerosk8/phone-contacts-sms-report/blob/master/documentation/images/gui_main.png)
 
+![GUI message missing input file](https://github.com/zerosk8/phone-contacts-sms-report/blob/master/documentation/images/gui_message_info_missing_input.png)
+
+![GUI message missing output directory](https://github.com/zerosk8/phone-contacts-sms-report/blob/master/documentation/images/gui_message_info_missing_output.png)
+
+![GUI message error](https://github.com/zerosk8/phone-contacts-sms-report/blob/master/documentation/images/gui_message_error.png)
+
+![GUI message success](https://github.com/zerosk8/phone-contacts-sms-report/blob/master/documentation/images/gui_message_success.png)
+
 ## Console mode
 1. Open a terminal and navigate to the root folder.
-2. Execute the command `$ ./phone_contacts_report` and specify:
+2. Execute the command `$ ./contacts_and_sms_reports` and specify:
 * `-c` (`--contacts`) option with the contacts file path.
 * `-s` (`--sms`) option with the SMS file path.
 * `-o` (`--output`) option with a folder path, to generate the report files in this folder.
 
 Examples:
-- `./phone_contacts_report -c ./TestFiles/short_example_contacts_file.vcf -s ./TestFiles/short_example_sms_file.xml -o /home/user/Desktop/`. 
+- `./contacts_and_sms_reports -c ./TestFiles/short_example_contacts_file.vcf -s ./TestFiles/short_example_sms_file.xml -o /home/user/Desktop/`. 
 This will generate web documents with phone contacts and SMS messages in the desktop folder.
 
-- `./phone_contacts_report -c ./TestFiles/short_example_contacts_file.vcf -s ./TestFiles/short_example_sms_file.xml -o /home/user/Desktop/`. 
+- `./contacts_and_sms_reports -c ./TestFiles/short_example_contacts_file.vcf -s ./TestFiles/short_example_sms_file.xml -o /home/user/Desktop/`. 
 This will generate a web document with phone contacts in the desktop folder.
 
-- `./phone_contacts_report -s ./TestFiles/short_example_sms_file.xml -o /home/user/Desktop/`. 
+- `./contacts_and_sms_reports -s ./TestFiles/short_example_sms_file.xml -o /home/user/Desktop/`. 
 This will generate a web document with SMS messages in the desktop folder.
 
-- `./phone_contacts_report -c ./TestFiles/short_example_contacts_file.vcf`. 
+- `./contacts_and_sms_reports -c ./TestFiles/short_example_contacts_file.vcf`. 
 This will generate a web document with phone contacts in the root application folder.
 
 # Result files
