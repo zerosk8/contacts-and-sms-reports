@@ -30,15 +30,15 @@ Now you can run the application.
 1. Open a terminal and navigate to the root folder.
 2. Execute the command `$ ./contacts_and_sms_reports`.
 
-![GUI main window](https://github.com/zerosk8/phone-contacts-sms-report/blob/master/documentation/images/gui_main.png)
+![GUI main window](https://github.com/zerosk8/contacts-and-sms-reports/blob/master/documentation/images/gui_main.png)
 
-![GUI message missing input file](https://github.com/zerosk8/phone-contacts-sms-report/blob/master/documentation/images/gui_message_info_missing_input.png)
+![GUI message missing input file](https://github.com/zerosk8/contacts-and-sms-reports/blob/master/documentation/images/gui_message_info_missing_input.png)
 
-![GUI message missing output directory](https://github.com/zerosk8/phone-contacts-sms-report/blob/master/documentation/images/gui_message_info_missing_output.png)
+![GUI message missing output directory](https://github.com/zerosk8/contacts-and-sms-reports/blob/master/documentation/images/gui_message_info_missing_output.png)
 
-![GUI message error](https://github.com/zerosk8/phone-contacts-sms-report/blob/master/documentation/images/gui_message_error.png)
+![GUI message error](https://github.com/zerosk8/contacts-and-sms-reports/blob/master/documentation/images/gui_message_error.png)
 
-![GUI message success](https://github.com/zerosk8/phone-contacts-sms-report/blob/master/documentation/images/gui_message_success.png)
+![GUI message success](https://github.com/zerosk8/contacts-and-sms-reports/blob/master/documentation/images/gui_message_success.png)
 
 ## Console mode
 1. Open a terminal and navigate to the root folder.
@@ -63,12 +63,12 @@ This will generate a web document with phone contacts in the root application fo
 # Result files
 ## Contacts report file
 
-![Contacts report file](https://github.com/zerosk8/phone-contacts-sms-report/blob/master/documentation/images/contacts_report.png)
+![Contacts report file](https://github.com/zerosk8/contacts-and-sms-reports/blob/master/documentation/images/contacts_report.png)
 
 ## SMS messages report file
 
-![SMS messages report file](https://github.com/zerosk8/phone-contacts-sms-report/blob/master/documentation/images/sms_messages_report.png)
+![SMS messages report file](https://github.com/zerosk8/contacts-and-sms-reports/blob/master/documentation/images/sms_messages_report.png)
 
 ## SMS messages per contact report file
 
-![SMS messages per contact report file](https://github.com/zerosk8/phone-contacts-sms-report/blob/master/documentation/images/contact_sms_messages_report.png)
+![SMS messages per contact report file](https://github.com/zerosk8/contacts-and-sms-reports/blob/master/documentation/images/contact_sms_messages_report.png)
