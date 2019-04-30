@@ -36,27 +36,27 @@ void Sms::SetText(const std::string & text)
     this->text = text;
 }
 
-TelephoneNumber Sms::GetTelephoneNumber()
+TelephoneNumber Sms::GetTelephoneNumber() const
 {
     return phoneNumber;
 }
 
-std::string Sms::GetContactName()
+std::string Sms::GetContactName() const
 {
     return contactName;
 }
 
-std::string Sms::GetDateAndTime()
+std::string Sms::GetDateAndTime() const
 {
     return dateAndTime;
 }
 
-SmsType Sms::GetType()
+SmsType Sms::GetType() const
 {
     return type;
 }
 
-std::string Sms::GetText()
+std::string Sms::GetText() const
 {
     return text;
 }

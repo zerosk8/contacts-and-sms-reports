@@ -3,14 +3,19 @@
 
 # Requirements
 - A computer with **GNU/Linux** or **Macintosh**.
+- **Gtkmm (C++ Interfaces for GTK+ and GNOME)** to be installed in the computer for compiling.
 - The **contacts file** must be a **vCard** file (_.vcf_ or _.vcard_ file extension).
 - The **SMS file** must be an **XML** file (_.xml_ file extension).
+
+## How to install Gtkmm
+- GNU/Linux: https://www.gtkmm.org/en/download.html
+- MacOS: http://macappstore.org/gtkmm/
 
 ## How to get the contacts and SMS files
 These files need to be exported and stored on the PC or Mac. Each mobile OS and version shows a different way to perform this task. It is recommended to use **Super Backup app** to achieve this goal in a **easy way**.
 
-* Android: https://play.google.com/store/apps/details?id=com.idea.backup.smscontacts
-* iOS: https://itunes.apple.com/us/app/super-backup-export-import/id1052684097
+- Android: https://play.google.com/store/apps/details?id=com.idea.backup.smscontacts
+- iOS: https://itunes.apple.com/us/app/super-backup-export-import/id1052684097
 
 ### Android
 - How to export contacts: https://www.androidcentral.com/move-contacts-android
@@ -43,9 +48,9 @@ Now you can run the application.
 ## Console mode
 1. Open a terminal and navigate to the root folder.
 2. Execute the command `$ ./contacts_and_sms_reports` and specify:
-* `-c` (`--contacts`) option with the contacts file path.
-* `-s` (`--sms`) option with the SMS file path.
-* `-o` (`--output`) option with a folder path, to generate the report files in this folder.
+- `-c` (`--contacts`) option with the contacts file path.
+- `-s` (`--sms`) option with the SMS file path.
+- `-o` (`--output`) option with a folder path, to generate the report files in this folder.
 
 Examples:
 - `./contacts_and_sms_reports -c ./TestFiles/short_example_contacts_file.vcf -s ./TestFiles/short_example_sms_file.xml -o /home/user/Desktop/`. 

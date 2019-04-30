@@ -14,17 +14,17 @@ TelephoneNumber::TelephoneNumber(const std::string & number, const std::string &
     (!countryDialCode.empty())?this->containsCountryDialCode = true:this->containsCountryDialCode = false;
 }
 
-std::string TelephoneNumber::GetNumber()
+std::string TelephoneNumber::GetNumber() const
 {
     return number;
 }
 
-std::string TelephoneNumber::GetCountryDialCode()
+std::string TelephoneNumber::GetCountryDialCode() const
 {
     return countryDialCode;
 }
 
-bool TelephoneNumber::ContainsCountryDialCode()
+bool TelephoneNumber::ContainsCountryDialCode() const
 {
     return containsCountryDialCode;
 }

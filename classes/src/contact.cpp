@@ -31,22 +31,22 @@ void Contact::SetListOfSms(const std::vector<Sms> & listOfSms)
     this->listOfSms = listOfSms;
 }
 
-std::string Contact::GetName()
+std::string Contact::GetName() const
 {
     return name;
 }
 
-std::vector<TelephoneNumber> Contact::GetTelephoneNumbers()
+std::vector<TelephoneNumber> Contact::GetTelephoneNumbers() const
 {
     return phoneNumbers;
 }
 
-std::vector<std::string> Contact::GetEmails()
+std::vector<std::string> Contact::GetEmails() const
 {
     return emails;
 }
 
-std::vector<Sms> Contact::GetListOfSms()
+std::vector<Sms> Contact::GetListOfSms() const
 {
     return listOfSms;
 }

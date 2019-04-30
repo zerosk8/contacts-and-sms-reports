@@ -10,9 +10,9 @@ class TelephoneNumber
     public:
         TelephoneNumber();
         TelephoneNumber(const std::string & number, const std::string & countryDialCode = std::string());
-        std::string GetNumber();
-        std::string GetCountryDialCode();
-        bool ContainsCountryDialCode();
+        std::string GetNumber() const;
+        std::string GetCountryDialCode() const;
+        bool ContainsCountryDialCode() const;
         TelephoneNumber & operator=(const TelephoneNumber & telephoneNumber);
         ~TelephoneNumber();
     private:

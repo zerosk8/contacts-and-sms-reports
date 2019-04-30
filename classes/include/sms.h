@@ -18,11 +18,11 @@ class Sms
         void SetDateAndTime(const std::string & dateAndTime);
         void SetType(const SmsType & type);
         void SetText(const std::string & text);
-        TelephoneNumber GetTelephoneNumber();
-        std::string GetContactName();
-        std::string GetDateAndTime();
-        SmsType GetType();
-        std::string GetText();
+        TelephoneNumber GetTelephoneNumber() const;
+        std::string GetContactName() const;
+        std::string GetDateAndTime() const;
+        SmsType GetType() const;
+        std::string GetText() const;
         Sms & operator=(const Sms & sms);
         ~Sms();
     private:

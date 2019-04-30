@@ -18,10 +18,10 @@ class Contact
         void SetTelephoneNumbers(const std::vector<TelephoneNumber> & phoneNumbers);
         void SetEmails(const std::vector<std::string> & emails);
         void SetListOfSms(const std::vector<Sms> & listOfSms);
-        std::string GetName();
-        std::vector<TelephoneNumber> GetTelephoneNumbers();
-        std::vector<std::string> GetEmails();
-        std::vector<Sms> GetListOfSms();
+        std::string GetName() const;
+        std::vector<TelephoneNumber> GetTelephoneNumbers() const;
+        std::vector<std::string> GetEmails() const;
+        std::vector<Sms> GetListOfSms() const;
         void AddTelephoneNumber(const TelephoneNumber & phoneNumber);
         void AddSms(const Sms & sms);
         Contact & operator=(const Contact & contact);
