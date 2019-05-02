@@ -1,4 +1,4 @@
-**/contacts_and_sms_reports
 **/test_files
 **/obj
-**.vscode
+**/.vscode
+contacts_and_sms_reports
