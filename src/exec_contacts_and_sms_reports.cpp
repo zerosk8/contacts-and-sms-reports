@@ -1,4 +1,4 @@
-#include "exec_contacts_and_sms_reports.h"
+#include "exec_contacts_and_sms_reports.hpp"
 
 ExecContactsAndSmsReports::ExecContactsAndSmsReports(){}
 

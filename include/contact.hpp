@@ -1,9 +1,9 @@
-#ifndef _CONTACT_H_
-#define _CONTACT_H_
+#ifndef _CONTACT_HPP_
+#define _CONTACT_HPP_
 #include <string>
 #include <vector>
-#include "telephone_number.h"
-#include "sms.h"
+#include "telephone_number.hpp"
+#include "sms.hpp"
 
 // NOT "using namespace std;" BECAUSE OF THIS
 // https://stackoverflow.com/questions/5527665/why-am-i-getting-string-does-not-name-a-type-error

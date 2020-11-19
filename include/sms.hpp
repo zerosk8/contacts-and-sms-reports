@@ -1,7 +1,7 @@
-#ifndef _SMS_H_
-#define _SMS_H_
+#ifndef _SMS_HPP_
+#define _SMS_HPP_
 #include <string>
-#include "telephone_number.h"
+#include "telephone_number.hpp"
 
 enum SmsType {incoming, outgoing, unknown};
 

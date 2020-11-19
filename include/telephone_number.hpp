@@ -1,5 +1,5 @@
-#ifndef _TELEPHONE_NUMBER_H_
-#define _TELEPHONE_NUMBER_H_
+#ifndef _TELEPHONE_NUMBER_HPP_
+#define _TELEPHONE_NUMBER_HPP_
 #include <string>
 
 // NOT "using namespace std;" BECAUSE OF THIS

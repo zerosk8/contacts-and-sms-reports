@@ -1,5 +1,5 @@
-#ifndef _UTILS_STRING_H_
-#define _UTILS_STRING_H_
+#ifndef _UTILS_STRING_HPP_
+#define _UTILS_STRING_HPP_
 #include <string>
 
 // NOT "using namespace std;" BECAUSE OF THIS

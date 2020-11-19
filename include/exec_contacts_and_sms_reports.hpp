@@ -1,12 +1,12 @@
-#ifndef _CONTACTS_AND_SMS_REPORTS_H
-#define _CONTACTS_AND_SMS_REPORTS_H
+#ifndef _CONTACTS_AND_SMS_REPORTS_HPP_
+#define _CONTACTS_AND_SMS_REPORTS_HPP_
 #include <fstream>
 #include <string>
 #include <vector>
-#include "contact.h"
-#include "utils_string.h"
-#include "utils_file_system.h"
-#include "utils_html.h"
+#include "contact.hpp"
+#include "utils_string.hpp"
+#include "utils_file_system.hpp"
+#include "utils_html.hpp"
 
 // NOT "using namespace std;" BECAUSE OF THIS
 // https://stackoverflow.com/questions/5527665/why-am-i-getting-string-does-not-name-a-type-error

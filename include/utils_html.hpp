@@ -1,10 +1,10 @@
-#ifndef _UTILS_HTML_H_
-#define _UTILS_HTML_H_
+#ifndef _UTILS_HTML_HPP_
+#define _UTILS_HTML_HPP_
 #include <string>
 #include <string.h>
 #include "CTML.h"
-#include "contact.h"
-#include "sms.h"
+#include "contact.hpp"
+#include "sms.hpp"
 
 // NOT "using namespace std;" BECAUSE OF THIS
 // https://stackoverflow.com/questions/5527665/why-am-i-getting-string-does-not-name-a-type-error

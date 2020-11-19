@@ -1,4 +1,4 @@
-#include "utils_string.h"
+#include "utils_string.hpp"
 
 std::string UtilsString::TrimWhiteSpacesFromStartOfString(const std::string & line)
 {

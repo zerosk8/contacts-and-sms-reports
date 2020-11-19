@@ -1,5 +1,5 @@
-#ifndef _GUI_CONTACTS_AND_SMS_REPORTS_H_
-#define _GUI_CONTACTS_AND_SMS_REPORTS_H_
+#ifndef _GUI_CONTACTS_AND_SMS_REPORTS_HPP_
+#define _GUI_CONTACTS_AND_SMS_REPORTS_HPP_
 #include <gtkmm/builder.h>
 #include <gtkmm/applicationwindow.h>
 #include <gtkmm/messagedialog.h>
@@ -7,7 +7,7 @@
 #include <gtkmm/button.h>
 #include <iostream>
 #include <string>
-#include "exec_contacts_and_sms_reports.h"
+#include "exec_contacts_and_sms_reports.hpp"
 
 const std::string GLADE_FILE_PATH = "./glade/GUI_contacts_and_sms_reports.glade";
 const std::string GLADE_ID_MAIN_WINDOW = "GUIMainWindow";

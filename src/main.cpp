@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
-#include "exec_contacts_and_sms_reports.h"
-#include "gui_contacts_and_sms_reports.h"
+#include "exec_contacts_and_sms_reports.hpp"
+#include "gui_contacts_and_sms_reports.hpp"
 
 using namespace std;
 
