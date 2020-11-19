@@ -1,10 +1,5 @@
 CXX = g++
-CFLAGS = -std=c++11 -Wall -g3
-PATH_INCLUDE = ./include
-PATH_SRC = ./src
-PATH_BUILD = ./build
-PATH_LIB =./lib
-PATH_BIN = ./bin
+CSTD = -std=c++14
 CLASS_TELEPHONE_NUMBER = telephone_number
 CLASS_CONTACT = contact
 CLASS_SMS = sms
@@ -18,28 +13,46 @@ FILE_EXT_SRC = cpp
 FILE_EXT_BUILD = o
 MAIN = main
 EXE = contacts_and_sms_reports
+BUILD_DEBUG = debug
+BUILD_RELEASE = release
+PATH_INCLUDE = ./include
+PATH_SRC = ./src
+PATH_BUILD_ROOT = ./build
+PATH_BUILD_DEBUG = $(PATH_BUILD_ROOT)/$(BUILD_DEBUG)
+PATH_BUILD_RELEASE = $(PATH_BUILD_ROOT)/$(BUILD_RELEASE)
+PATH_LIB =./lib
+PATH_BIN_ROOT = ./bin
+PATH_BIN_DEBUG = $(PATH_BIN_ROOT)/$(BUILD_DEBUG)
+PATH_BIN_RELEASE = $(PATH_BIN_ROOT)/$(BUILD_RELEASE)
 
-all: debug
+##
+# Default build mode when no targets
+##
 
-debug: $(PATH_BUILD)/debug $(PATH_BIN)/debug $(EXE)
-	mv $(PATH_BUILD)/*.$(FILE_EXT_BUILD) $(PATH_BUILD)/debug/
-	mv $(PATH_BIN)/$(EXE) $(PATH_BIN)/debug/
+BUILD_MODE = $(BUILD_DEBUG)
+CFLAGS = $(CSTD) -Wall -g3
+PATH_BUILD = $(PATH_BUILD_DEBUG)
+PATH_BIN = $(PATH_BIN_DEBUG)
 
-release: $(PATH_BUILD)/release $(PATH_BIN)/release $(EXE)
-	mv $(PATH_BUILD)/*.$(FILE_EXT_BUILD) $(PATH_BUILD)/release/
-	mv $(PATH_BIN)/$(EXE) $(PATH_BIN)/release/
+###
 
-$(PATH_BUILD)/debug:
-	mkdir -p -m 755 $(PATH_BUILD)/debug
+ifeq ($(MAKECMDGOALS),$(BUILD_RELEASE))
+	BUILD_MODE = $(BUILD_RELEASE)
+	CFLAGS = $(CSTD) -O
+	PATH_BUILD = $(PATH_BUILD_RELEASE)
+	PATH_BIN = $(PATH_BIN_RELEASE)
+endif
 
-$(PATH_BIN)/debug:
-	mkdir -p -m 755 $(PATH_BIN)/debug
+$(BUILD_DEBUG) $(BUILD_RELEASE): pre_build $(PATH_BUILD) $(PATH_BIN) $(EXE)
 
-$(PATH_BUILD)/release:
-	mkdir -p -m 755 $(PATH_BUILD)/release
+pre_build:
+	@echo Building $(BUILD_MODE) mode...
 
-$(PATH_BIN)/release:
-	mkdir -p -m 755 $(PATH_BIN)/release
+$(PATH_BUILD):
+	mkdir -p -m 755 $(PATH_BUILD)
+
+$(PATH_BIN):
+	mkdir -p -m 755 $(PATH_BIN)
 
 $(EXE): $(CLASS_TELEPHONE_NUMBER).$(FILE_EXT_BUILD) $(CLASS_SMS).$(FILE_EXT_BUILD) \
 	$(CLASS_CONTACT).$(FILE_EXT_BUILD) $(CLASS_UTILS_STRING).$(FILE_EXT_BUILD) \
@@ -59,10 +72,12 @@ $(EXE): $(CLASS_TELEPHONE_NUMBER).$(FILE_EXT_BUILD) $(CLASS_SMS).$(FILE_EXT_BUIL
 	$(PATH_SRC)/$(MAIN).$(FILE_EXT_SRC) -o $(PATH_BIN)/$(EXE) \
 	`pkg-config gtkmm-3.0 --cflags --libs`
 
-$(CLASS_TELEPHONE_NUMBER).$(FILE_EXT_BUILD): $(PATH_SRC)/$(CLASS_TELEPHONE_NUMBER).$(FILE_EXT_SRC) \
+$(CLASS_TELEPHONE_NUMBER).$(FILE_EXT_BUILD): \
+	$(PATH_SRC)/$(CLASS_TELEPHONE_NUMBER).$(FILE_EXT_SRC) \
 	$(PATH_INCLUDE)/$(CLASS_TELEPHONE_NUMBER).$(FILE_EXT_INCLUDE)
 	
-	$(CXX) -c $(CFLAGS) -I$(PATH_INCLUDE) $(PATH_SRC)/$(CLASS_TELEPHONE_NUMBER).$(FILE_EXT_SRC) -o \
+	$(CXX) -c $(CFLAGS) -I$(PATH_INCLUDE) \
+	$(PATH_SRC)/$(CLASS_TELEPHONE_NUMBER).$(FILE_EXT_SRC) -o \
     $(PATH_BUILD)/$(CLASS_TELEPHONE_NUMBER).$(FILE_EXT_BUILD)
 
 $(CLASS_SMS).$(FILE_EXT_BUILD): $(PATH_SRC)/$(CLASS_SMS).$(FILE_EXT_SRC) \
@@ -135,4 +150,4 @@ $(CLASS_GUI_CONTACTS_AND_SMS_REPORTS).$(FILE_EXT_BUILD): \
 	`pkg-config gtkmm-3.0 --cflags --libs`
 
 clean:
-	rm -Rf $(PATH_BUILD) $(PATH_BIN)
+	rm -Rf $(PATH_BUILD_ROOT) $(PATH_BIN_ROOT)
