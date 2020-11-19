@@ -9,7 +9,7 @@
 #include <string>
 #include "exec_contacts_and_sms_reports.h"
 
-const std::string GLADE_FILE_PATH = "./classes/glade/GUI_contacts_and_sms_reports.glade";
+const std::string GLADE_FILE_PATH = "./glade/GUI_contacts_and_sms_reports.glade";
 const std::string GLADE_ID_MAIN_WINDOW = "GUIMainWindow";
 const std::string GLADE_ID_CONTACTS_FILE_PATH_BUTTON = "GUIContactsFilePathButton";
 const std::string GLADE_ID_SMS_FILE_PATH_BUTTON = "GUISmsFilePathButton";

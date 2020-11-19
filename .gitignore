@@ -1,4 +1,4 @@
-**/test_files
-**/obj
 **/.vscode
-contacts_and_sms_reports
+**/bin
+**/build
+**/test_files
