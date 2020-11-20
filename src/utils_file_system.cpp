@@ -27,14 +27,19 @@ bool UtilsFileSystem::CopyFile(const std::string & originFilePath, const std::st
 }
 
 bool UtilsFileSystem::ExistsDirectoryPath(const std::string & directoryPath)
-{
-    struct stat directoryInfo;
-    return ((stat(directoryPath.c_str(),&directoryInfo) == 0) && (directoryInfo.st_mode & S_IFDIR));
+{   
+    #ifdef _WIN32
+        unsigned long directoryInfo = GetFileAttributesA(directoryPath.c_str());
+        return !(directoryInfo == INVALID_FILE_ATTRIBUTES) && (directoryInfo & FILE_ATTRIBUTE_DIRECTORY);
+    #else
+        struct stat directoryInfo;
+        return (stat(directoryPath.c_str(),&directoryInfo) == 0) && (directoryInfo.st_mode & S_IFDIR);
+    #endif
 }
 
 bool UtilsFileSystem::CreateDirectoryPath(const std::string & directoryPath)
 {
-    #if defined(_WIN32)
+    #ifdef _WIN32
         if(_mkdir(directoryPath.c_str()) == -1)
         {
             return false;
@@ -59,7 +64,7 @@ const std::string & directoryName)
     if(!parentDirectoryPath.empty())
     {
         std::string path = parentDirectoryPath;
-        #if defined(_WIN32)
+        #ifdef _WIN32
             (path[path.size() - 1] != WINDOWS_PATH_DELIMITER)?path += WINDOWS_PATH_DELIMITER:path;
         #else
             (path[path.size() - 1] != UNIX_PATH_DELIMITER)?path += UNIX_PATH_DELIMITER:path;

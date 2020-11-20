@@ -4,7 +4,13 @@
 #include <string>
 #include <string.h>
 #include <sys/types.h>
-#include <sys/stat.h>
+
+#ifdef _WIN32
+    #include <windows.h>
+    #include <direct.h>
+#else
+    #include <sys/stat.h>
+#endif
 
 // NOT "using namespace std;" BECAUSE OF THIS
 // https://stackoverflow.com/questions/5527665/why-am-i-getting-string-does-not-name-a-type-error

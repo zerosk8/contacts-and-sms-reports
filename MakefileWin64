@@ -24,6 +24,7 @@ PATH_LIB =./lib
 PATH_BIN_ROOT = ./bin
 PATH_BIN_DEBUG = $(PATH_BIN_ROOT)/$(BUILD_DEBUG)
 PATH_BIN_RELEASE = $(PATH_BIN_ROOT)/$(BUILD_RELEASE)
+PKG_CONFIG_PATH = C:\msys64\mingw64\lib\pkgconfig
 
 #
 # Default build mode when no targets
@@ -47,10 +48,10 @@ pre_build:
 	@echo Building $(BUILD_MODE) mode...
 
 $(PATH_BUILD):
-	mkdir $(PATH_BUILD)
+	mkdir -p -m 755 $(PATH_BUILD)
 
 $(PATH_BIN):
-	mkdir $(PATH_BIN)
+	mkdir -p -m 755 $(PATH_BIN)
 
 $(EXE): $(CLASS_TELEPHONE_NUMBER).$(FILE_EXT_BUILD) $(CLASS_SMS).$(FILE_EXT_BUILD) \
 	$(CLASS_CONTACT).$(FILE_EXT_BUILD) $(CLASS_UTILS_STRING).$(FILE_EXT_BUILD) \
