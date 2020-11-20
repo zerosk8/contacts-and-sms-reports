@@ -24,7 +24,6 @@ PATH_LIB =./lib
 PATH_BIN_ROOT = ./bin
 PATH_BIN_DEBUG = $(PATH_BIN_ROOT)/$(BUILD_DEBUG)
 PATH_BIN_RELEASE = $(PATH_BIN_ROOT)/$(BUILD_RELEASE)
-PKG_CONFIG_PATH = C:\msys64\mingw64\lib\pkgconfig
 
 #
 # Default build mode when no targets
