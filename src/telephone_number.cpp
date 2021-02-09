@@ -9,6 +9,14 @@ TelephoneNumber::TelephoneNumber()
 
 TelephoneNumber::TelephoneNumber(const std::string & number, const std::string & countryDialCode)
 {
+    if(number.empty())
+    {
+        throw std::invalid_argument("Number is empty");
+    }
+    if(!this->isNumber(number) || !this->isNumber(countryDialCode))
+    {
+        throw std::invalid_argument("Number or country dial code is not a numeric string");
+    }
     this->number = number;
     this->countryDialCode = countryDialCode;
     (!countryDialCode.empty())?this->containsCountryDialCode = true:this->containsCountryDialCode = false;
@@ -42,3 +50,8 @@ TelephoneNumber & TelephoneNumber::operator=(const TelephoneNumber & telephoneNu
 }
 
 TelephoneNumber::~TelephoneNumber(){};
+
+bool TelephoneNumber::isNumber(const std::string & value) const
+{
+    return value.find_first_not_of("0123456789") == std::string::npos;
+}
