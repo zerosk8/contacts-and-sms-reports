@@ -1,9 +1,16 @@
 #include "sms.hpp"
 
-Sms::Sms(){}
+Sms::Sms()
+{
+    this->type = SmsType::unknown;
+}
 
 Sms::Sms(const TelephoneNumber & phoneNumber, const std::string & contactName, const std::string & dateAndTime, const SmsType & type, const std::string & text)
 {
+    if(phoneNumber.GetNumber().empty() || contactName.empty() || dateAndTime.empty() || text.empty())
+    {
+        throw std::invalid_argument("One or more paremeters are empty");
+    }
     this->phoneNumber = phoneNumber;
     this->contactName = contactName;
     this->dateAndTime = dateAndTime;

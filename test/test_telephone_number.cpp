@@ -4,6 +4,9 @@
 void RequireEmptyPhoneNumber(const TelephoneNumber & phoneNumber);
 void RequireEmptyCountryDialCode(const TelephoneNumber & phoneNumber);
 
+std::string number = "123456789", countryDialCode = "34";
+TelephoneNumber phoneNumber(number,countryDialCode);
+
 TEST_CASE("Constructor with no parameters creates an empty TelephoneNumber object","[TelephoneNumber]")
 {
     TelephoneNumber phoneNumber;
@@ -13,14 +16,13 @@ TEST_CASE("Constructor with no parameters creates an empty TelephoneNumber objec
 
 TEST_CASE("Constructor with one numeric string parameter creates a TelephoneNumber object","[TelephoneNumber]")
 {
-    TelephoneNumber phoneNumber("123456789");
+    TelephoneNumber phoneNumber(number);
     RequireEmptyPhoneNumber(phoneNumber);
     RequireEmptyCountryDialCode(phoneNumber);
 }
 
 TEST_CASE("Constructor with two numeric string parameters creates a TelephoneNumber object","[TelephoneNumber]")
 {
-    TelephoneNumber phoneNumber("123456789","34");
     RequireEmptyPhoneNumber(phoneNumber);
     REQUIRE_FALSE(phoneNumber.GetCountryDialCode().empty());
     REQUIRE(phoneNumber.ContainsCountryDialCode());
@@ -28,7 +30,7 @@ TEST_CASE("Constructor with two numeric string parameters creates a TelephoneNum
 
 TEST_CASE("Constructor with second empty string parameter creates a TelephoneNumber object","[TelephoneNumber]")
 {
-    TelephoneNumber phoneNumber("123456789","");
+    TelephoneNumber phoneNumber(number,"");
     RequireEmptyPhoneNumber(phoneNumber);
     RequireEmptyCountryDialCode(phoneNumber);
 }
@@ -48,22 +50,20 @@ TEST_CASE("Constructor with second non-numeric string parameter throws an except
     REQUIRE_THROWS(TelephoneNumber("112233445566","ac"));
 }
 
-TEST_CASE("When assigning another value, the object is modified","[TelephoneNumber]")
+TEST_CASE("When assigning another TelephoneNumber object value, the object is modified","[TelephoneNumber]")
 {
     auto secondNumber = "999888777";
-    TelephoneNumber firstPhoneNumber("111222333","34"), secondPhoneNumber(secondNumber);
+    TelephoneNumber firstPhoneNumber(number,countryDialCode), secondPhoneNumber(secondNumber);
     firstPhoneNumber = secondPhoneNumber;
     REQUIRE(firstPhoneNumber.GetNumber() == secondNumber);
     RequireEmptyCountryDialCode(firstPhoneNumber);
 }
 
-TEST_CASE("When assigning the same value, the object is not modified","[TelephoneNumber]")
+TEST_CASE("When assigning the same TelephoneNumber object value, the object is not modified","[TelephoneNumber]")
 {
-    auto number = "35477889911", coutryDialCode = "124";
-    TelephoneNumber phoneNumber(number,coutryDialCode);
     phoneNumber = phoneNumber;
     REQUIRE(phoneNumber.GetNumber() == number);
-    REQUIRE(phoneNumber.GetCountryDialCode() == coutryDialCode);
+    REQUIRE(phoneNumber.GetCountryDialCode() == countryDialCode);
 }
 
 void RequireEmptyPhoneNumber(const TelephoneNumber & phoneNumber)

@@ -13,9 +13,13 @@ TelephoneNumber::TelephoneNumber(const std::string & number, const std::string &
     {
         throw std::invalid_argument("Number is empty");
     }
-    if(!this->isNumber(number) || !this->isNumber(countryDialCode))
+    if(!this->isNumber(number))
     {
-        throw std::invalid_argument("Number or country dial code is not a numeric string");
+        throw std::invalid_argument("Number is not a numeric string");
+    }
+    if(!countryDialCode.empty() && !this->isNumber(countryDialCode))
+    {
+        throw std::invalid_argument("Country dial code is not a numeric string");
     }
     this->number = number;
     this->countryDialCode = countryDialCode;
