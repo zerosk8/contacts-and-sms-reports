@@ -2,12 +2,16 @@
 
 Contact::Contact(){}
 
-Contact::Contact(const std::string & name, const std::vector<TelephoneNumber> & phoneNumbers, const std::vector<std::string> & emails, 
-const std::vector<Sms> & listOfSms)
+Contact::Contact(const std::string & name, const std::vector<TelephoneNumber> & listOfTelephoneNumbers,
+    const std::vector<std::string> & listOfEmailAddresses, const std::vector<Sms> & listOfSms)
 {
+    if(name.empty() || listOfTelephoneNumbers.empty())
+    {
+        throw std::invalid_argument("Empty contact name or list of telephone numbers");
+    }
     this->name = name;
-    this->phoneNumbers = phoneNumbers;
-    this->emails = emails;
+    this->listOfTelephoneNumbers = listOfTelephoneNumbers;
+    this->listOfEmailAddresses = listOfEmailAddresses;
     this->listOfSms = listOfSms;
 }
 
@@ -16,14 +20,14 @@ void Contact::SetName(const std::string & name)
     this->name = name;
 }
 
-void Contact::SetTelephoneNumbers(const std::vector<TelephoneNumber> & phoneNumbers)
+void Contact::SetListOfTelephoneNumbers(const std::vector<TelephoneNumber> & listOfTelephoneNumbers)
 {
-    this->phoneNumbers = phoneNumbers;
+    this->listOfTelephoneNumbers = listOfTelephoneNumbers;
 }
 
-void Contact::SetEmails(const std::vector<std::string> & emails)
+void Contact::SetListOfEmailAddresses(const std::vector<std::string> & listOfEmailAddresses)
 {
-    this->emails = emails;
+    this->listOfEmailAddresses = listOfEmailAddresses;
 }
 
 void Contact::SetListOfSms(const std::vector<Sms> & listOfSms)
@@ -36,14 +40,14 @@ std::string Contact::GetName() const
     return name;
 }
 
-std::vector<TelephoneNumber> Contact::GetTelephoneNumbers() const
+std::vector<TelephoneNumber> Contact::GetListOfTelephoneNumbers() const
 {
-    return phoneNumbers;
+    return listOfTelephoneNumbers;
 }
 
-std::vector<std::string> Contact::GetEmails() const
+std::vector<std::string> Contact::GetListOfEmailAddresses() const
 {
-    return emails;
+    return listOfEmailAddresses;
 }
 
 std::vector<Sms> Contact::GetListOfSms() const
@@ -53,7 +57,7 @@ std::vector<Sms> Contact::GetListOfSms() const
 
 void Contact::AddTelephoneNumber(const TelephoneNumber & phoneNumber)
 {
-    phoneNumbers.push_back(phoneNumber);
+    listOfTelephoneNumbers.push_back(phoneNumber);
 }
 
 void Contact::AddSms(const Sms & sms)
@@ -66,8 +70,8 @@ Contact & Contact::operator=(const Contact & contact)
     if(this != &contact)
     {
         this->name = contact.name;
-        this->phoneNumbers = contact.phoneNumbers;
-        this->emails = contact.emails;
+        this->listOfTelephoneNumbers = contact.listOfTelephoneNumbers;
+        this->listOfEmailAddresses = contact.listOfEmailAddresses;
         this->listOfSms = contact.listOfSms;
     }
     return * this;

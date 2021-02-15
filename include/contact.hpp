@@ -12,15 +12,16 @@ class Contact
 {
     public:
         Contact();
-        Contact(const std::string & name, const std::vector<TelephoneNumber> & phoneNumbers, 
-        const std::vector<std::string> & emails, const std::vector<Sms> & listOfSms = std::vector<Sms>());
+        Contact(const std::string & name, const std::vector<TelephoneNumber> & listOfTelephoneNumbers, 
+            const std::vector<std::string> & listOfEmailAddresses = std::vector<std::string>(),
+            const std::vector<Sms> & listOfSms = std::vector<Sms>());
         void SetName(const std::string & name);
-        void SetTelephoneNumbers(const std::vector<TelephoneNumber> & phoneNumbers);
-        void SetEmails(const std::vector<std::string> & emails);
+        void SetListOfTelephoneNumbers(const std::vector<TelephoneNumber> & phoneNumbers);
+        void SetListOfEmailAddresses(const std::vector<std::string> & emails);
         void SetListOfSms(const std::vector<Sms> & listOfSms);
         std::string GetName() const;
-        std::vector<TelephoneNumber> GetTelephoneNumbers() const;
-        std::vector<std::string> GetEmails() const;
+        std::vector<TelephoneNumber> GetListOfTelephoneNumbers() const;
+        std::vector<std::string> GetListOfEmailAddresses() const;
         std::vector<Sms> GetListOfSms() const;
         void AddTelephoneNumber(const TelephoneNumber & phoneNumber);
         void AddSms(const Sms & sms);
@@ -28,8 +29,8 @@ class Contact
         ~Contact();
     private:
         std::string name;
-        std::vector<TelephoneNumber> phoneNumbers;
-        std::vector<std::string> emails;
+        std::vector<TelephoneNumber> listOfTelephoneNumbers;
+        std::vector<std::string> listOfEmailAddresses;
         std::vector<Sms> listOfSms;
 };
 

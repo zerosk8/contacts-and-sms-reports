@@ -11,11 +11,11 @@ TelephoneNumber::TelephoneNumber(const std::string & number, const std::string &
 {
     if(number.empty())
     {
-        throw std::invalid_argument("Number is empty");
+        throw std::invalid_argument("Empty telephone number");
     }
     if(!this->isNumber(number))
     {
-        throw std::invalid_argument("Number is not a numeric string");
+        throw std::invalid_argument("Telephone number is not a numeric string");
     }
     if(!countryDialCode.empty() && !this->isNumber(countryDialCode))
     {

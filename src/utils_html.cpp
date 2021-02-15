@@ -164,13 +164,13 @@ const std::string & directoryPathForSmsPerContactDocuments, const std::string & 
 {
     CTML::Node cardBodyContact("div.card-body");
     cardBodyContact.AppendChild(CTML::Node("h5.card-title",(*contactIterator).GetName()));
-    std::vector<TelephoneNumber> listOfPhoneNumbers = (*contactIterator).GetTelephoneNumbers();
+    std::vector<TelephoneNumber> listOfPhoneNumbers = (*contactIterator).GetListOfTelephoneNumbers();
     for(std::vector<TelephoneNumber>::iterator phoneNumberIterator = listOfPhoneNumbers.begin(); 
     phoneNumberIterator != listOfPhoneNumbers.end(); ++phoneNumberIterator)
     {
         cardBodyContact.AppendChild(CTML::Node("p.card-text",HtmlGetTelephoneNumberString(*phoneNumberIterator)));
     }
-    std::vector<std::string> listOfEmails = (*contactIterator).GetEmails();
+    std::vector<std::string> listOfEmails = (*contactIterator).GetListOfEmailAddresses();
     for(std::vector<std::string>::iterator emailIterator = listOfEmails.begin(); emailIterator != listOfEmails.end(); 
     ++emailIterator)
     {

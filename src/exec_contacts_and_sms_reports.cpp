@@ -478,7 +478,7 @@ void ExecContactsAndSmsReports::RemoveDuplicatedTelephoneNumbers(std::vector<Con
     for(std::vector<Contact>::iterator contactsIterator = listOfContacts.begin(); 
     contactsIterator != listOfContacts.end(); ++contactsIterator)
     {
-        std::vector<TelephoneNumber> listOfPhoneNumbers = (*contactsIterator).GetTelephoneNumbers();
+        std::vector<TelephoneNumber> listOfPhoneNumbers = (*contactsIterator).GetListOfTelephoneNumbers();
         std::vector<TelephoneNumber>::iterator phoneNumbersIterator = listOfPhoneNumbers.begin();
         while(phoneNumbersIterator != listOfPhoneNumbers.end())
         {
@@ -501,7 +501,7 @@ void ExecContactsAndSmsReports::RemoveDuplicatedTelephoneNumbers(std::vector<Con
                 ++phoneNumbersIterator;
             }
         }
-        (*contactsIterator).SetTelephoneNumbers(listOfPhoneNumbers);
+        (*contactsIterator).SetListOfTelephoneNumbers(listOfPhoneNumbers);
     }
 }
 
