@@ -66,10 +66,10 @@ void GUIContactsAndSmsReports::displaySuccessMessageDialog(const std::string & s
 void GUIContactsAndSmsReports::displayErrorMessageDialog(const std::string & errorText)
 {
     size_t positionOfSeparator = errorText.find_first_of(MESSAGE_DIALOG_ERROR_TEXT_SEPARATOR_CHAR);
-    std::string message = UTILS_STRING.TrimWhiteSpacesFromEndOfString
-    (UTILS_STRING.TrimWhiteSpacesFromStartOfString(errorText.substr(0,positionOfSeparator)));
-    std::string secondaryText = UTILS_STRING.TrimWhiteSpacesFromEndOfString
-    (UTILS_STRING.TrimWhiteSpacesFromStartOfString(errorText.substr(positionOfSeparator + 1)));
+    std::string message = UtilsString::TrimWhiteSpacesFromEndOfString
+    (UtilsString::TrimWhiteSpacesFromStartOfString(errorText.substr(0,positionOfSeparator)));
+    std::string secondaryText = UtilsString::TrimWhiteSpacesFromEndOfString
+    (UtilsString::TrimWhiteSpacesFromStartOfString(errorText.substr(positionOfSeparator + 1)));
     messageDialog->set_message(message);
     messageDialog->set_secondary_text(secondaryText);
     Glib::PropertyProxy<Gtk::MessageType> dialogMessageType

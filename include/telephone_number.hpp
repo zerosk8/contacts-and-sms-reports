@@ -15,6 +15,8 @@ class TelephoneNumber
         std::string GetCountryDialCode() const;
         bool ContainsCountryDialCode() const;
         TelephoneNumber & operator=(const TelephoneNumber & telephoneNumber);
+        bool operator==(const TelephoneNumber & telephoneNumber) const;
+        bool operator!=(const TelephoneNumber & telephoneNumber) const;
         ~TelephoneNumber();
     private:
         std::string number;

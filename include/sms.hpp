@@ -24,6 +24,8 @@ class Sms
         SmsType GetType() const;
         std::string GetText() const;
         Sms & operator=(const Sms & sms);
+        bool operator==(const Sms & sms) const;
+        bool operator!=(const Sms & sms) const;
         ~Sms();
     private:
         TelephoneNumber phoneNumber;

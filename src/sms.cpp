@@ -81,4 +81,18 @@ Sms & Sms::operator=(const Sms & sms)
     return * this;
 }
 
+bool Sms::operator==(const Sms & sms) const
+{
+    return this->phoneNumber == sms.phoneNumber && this->contactName == sms.contactName
+        && this->dateAndTime == sms.dateAndTime && this->type == sms.type
+        && this->text == sms.text;
+}
+
+bool Sms::operator!=(const Sms & sms) const
+{
+    return this->phoneNumber != sms.phoneNumber || this->contactName != sms.contactName
+        || this->dateAndTime != sms.dateAndTime || this->type != sms.type
+        || this->text != sms.text;
+}
+
 Sms::~Sms(){}

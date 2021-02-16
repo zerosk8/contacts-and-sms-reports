@@ -10,8 +10,8 @@ const std::string WHITE_SPACES_CHARS = " \t\r\n";
 class UtilsString
 {
     public:
-        std::string TrimWhiteSpacesFromStartOfString(const std::string & line);
-        std::string TrimWhiteSpacesFromEndOfString(const std::string & line);
+        static std::string TrimWhiteSpacesFromStartOfString(const std::string & line);
+        static std::string TrimWhiteSpacesFromEndOfString(const std::string & line);
 };
 
 #endif

@@ -251,7 +251,7 @@ bool ExecContactsAndSmsReports::IsLineEmailAddress(const std::string & line)
 
 bool ExecContactsAndSmsReports::IsLineSms(const std::string & line)
 {
-    std::string lineTrimmed = UTILS_STRING.TrimWhiteSpacesFromStartOfString(line);
+    std::string lineTrimmed = UtilsString::TrimWhiteSpacesFromStartOfString(line);
     return DoLineStartsWithKeyword(lineTrimmed,SMS_START_LINE_KEYWORD) && 
     DoLineEndsWithSmsEndLineKeyWord(lineTrimmed);
 }
@@ -271,7 +271,7 @@ bool ExecContactsAndSmsReports::DoLineEndsWithSmsEndLineKeyWord(const std::strin
 
 std::string ExecContactsAndSmsReports::GetValueFromContactsFileLine(const std::string & line)
 {
-    return UTILS_STRING.TrimWhiteSpacesFromEndOfString(line
+    return UtilsString::TrimWhiteSpacesFromEndOfString(line
     .substr(line.find(CONTACT_FILE_LINE_FIELD_VALUE_DELIMITER) + 1));
 }
 

@@ -23,7 +23,7 @@ TelephoneNumber::TelephoneNumber(const std::string & number, const std::string &
     }
     this->number = number;
     this->countryDialCode = countryDialCode;
-    (!countryDialCode.empty())?this->containsCountryDialCode = true:this->containsCountryDialCode = false;
+    this->containsCountryDialCode = (!countryDialCode.empty())?true:false;
 }
 
 std::string TelephoneNumber::GetNumber() const
@@ -49,8 +49,19 @@ TelephoneNumber & TelephoneNumber::operator=(const TelephoneNumber & telephoneNu
         this->countryDialCode = telephoneNumber.countryDialCode;
         this->containsCountryDialCode = telephoneNumber.containsCountryDialCode;
     }
-    
     return * this;
+}
+
+bool TelephoneNumber::operator==(const TelephoneNumber & telephoneNumber) const
+{
+    return (this->number == telephoneNumber.number)
+        && (this->countryDialCode == telephoneNumber.countryDialCode);
+}
+
+bool TelephoneNumber::operator!=(const TelephoneNumber & telephoneNumber) const
+{
+    return (this->number != telephoneNumber.number)
+        || (this->countryDialCode != telephoneNumber.countryDialCode);
 }
 
 TelephoneNumber::~TelephoneNumber(){};
