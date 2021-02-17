@@ -22,13 +22,16 @@ const std::string CURRENT_DIRECTORY_PATH = ".";
 class UtilsFileSystem
 {
     public:
-        bool OpenDestinationFile(std::ifstream & file, const char * fileName);
-        bool CopyFile(const std::string & originFilePath, const std::string & destinationFilePath);
-        bool ExistsDirectoryPath(const std::string & directoryPath);
-        bool CreateDirectoryPath(const std::string & directoryPath);
-        std::string GetCurrentDirectoryPath();
-        std::string GetFileOrDirectoryPathString(const std::string & parentDirectoryPath, 
-        const std::string & directoryName);
+        static bool OpenDestinationFile(std::ifstream & file,
+            const char * fileName);
+        static bool CopyFile(const std::string & originFilePath,
+            const std::string & destinationFilePath);
+        static bool ExistsDirectoryPath(const std::string & directoryPath);
+        static bool CreateDirectoryPath(const std::string & directoryPath);
+        static std::string GetCurrentDirectoryPath();
+        static std::string GetFileOrDirectoryPathString(
+            const std::string & parentDirectoryPath,
+            const std::string & directoryName);
 };
 
 #endif

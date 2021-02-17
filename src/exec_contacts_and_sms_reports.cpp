@@ -27,7 +27,7 @@ std::pair<bool,std::string> ExecContactsAndSmsReports::ExecContactsAndSmsReports
     
     if(!smsFilePath.empty())
     {
-        if(!UTILS_FILE_SYSTEM.OpenDestinationFile(file,smsFilePath.c_str()))
+        if(!UtilsFileSystem::OpenDestinationFile(file,smsFilePath.c_str()))
         {
             return std::pair<bool,std::string>(false,"Error opening the sms file: " + 
             std::string(strerror(errno)));
@@ -46,28 +46,32 @@ std::pair<bool,std::string> ExecContactsAndSmsReports::ExecContactsAndSmsReports
         }
         file.close();
         CTML::Document smsHtmlDocument;
-        UTILS_HTML.HtmlWriteDocumentHead(smsHtmlDocument,HTML_CHAR_ENCODING,HTML_VIEWPORT,HTML_AUTHOR,
-        HTML_STYLE_SHEETS_PATHS_FROM_ROOT_DIR,HTML_DOCUMENT_HEAD_TITLE);
+        UtilsHtml::HtmlWriteDocumentHead(smsHtmlDocument,HTML_CHAR_ENCODING,
+            HTML_VIEWPORT,HTML_AUTHOR,HTML_STYLE_SHEETS_PATHS_FROM_ROOT_DIR,
+            HTML_DOCUMENT_HEAD_TITLE);
         if(!contactsFilePath.empty())
         {
-            UTILS_HTML.HtmlWriteHeaderInDocumentBody(smsHtmlDocument,HTML_DOCUMENT_HEAD_TITLE,
-            navigationBarButtonsNamesAndLinks,1);
+            UtilsHtml::HtmlWriteHeaderInDocumentBody(smsHtmlDocument,
+                HTML_DOCUMENT_HEAD_TITLE,navigationBarButtonsNamesAndLinks,1);
         }
         else
         {
-            navigationBarButtonsNamesAndLinks.erase(navigationBarButtonsNamesAndLinks.begin());
-            UTILS_HTML.HtmlWriteHeaderInDocumentBody(smsHtmlDocument,HTML_DOCUMENT_HEAD_TITLE,
-            navigationBarButtonsNamesAndLinks,0);
+            navigationBarButtonsNamesAndLinks.erase(
+                navigationBarButtonsNamesAndLinks.begin());
+            UtilsHtml::HtmlWriteHeaderInDocumentBody(smsHtmlDocument,
+                HTML_DOCUMENT_HEAD_TITLE,navigationBarButtonsNamesAndLinks,0);
         }
-        UTILS_HTML.HtmlWriteSmsReportResultInDocumentBody(smsHtmlDocument,HTML_SMS_TITLE,listOfSms);
-        UTILS_HTML.HtmlWriteScriptsInDocumentBody(smsHtmlDocument,HTML_SCRIPTS_PATHS_FROM_ROOT_DIR);
+        UtilsHtml::HtmlWriteSmsReportResultInDocumentBody(smsHtmlDocument,
+            HTML_SMS_TITLE,listOfSms);
+        UtilsHtml::HtmlWriteScriptsInDocumentBody(smsHtmlDocument,
+            HTML_SCRIPTS_PATHS_FROM_ROOT_DIR);
         isReportsResultsDirectoriesStructureValid = 
         CheckAndCreateReportsResultsDirectoriesStructure(destinationPathForReportsResults);
         if(!isReportsResultsDirectoriesStructureValid.first)
         {
             return isReportsResultsDirectoriesStructureValid;
         }
-        if(!smsHtmlDocument.WriteToFile(UTILS_FILE_SYSTEM.GetFileOrDirectoryPathString
+        if(!smsHtmlDocument.WriteToFile(UtilsFileSystem::GetFileOrDirectoryPathString
         (destinationPathForReportsResults,FILE_SMS_REPORT_RESULT),CTML::Readability::MULTILINE))
         {
             return std::pair<bool,std::string>(false,"Error opening the sms report result file: " + 
@@ -76,7 +80,7 @@ std::pair<bool,std::string> ExecContactsAndSmsReports::ExecContactsAndSmsReports
     }
     if(!contactsFilePath.empty())
     {
-        if(!UTILS_FILE_SYSTEM.OpenDestinationFile(file,contactsFilePath.c_str()))
+        if(!UtilsFileSystem::OpenDestinationFile(file,contactsFilePath.c_str()))
         {
             return std::pair<bool,std::string>(false,"Error opening the contacts file: " + 
             std::string(strerror(errno)));
@@ -119,40 +123,47 @@ std::pair<bool,std::string> ExecContactsAndSmsReports::ExecContactsAndSmsReports
         RemoveDuplicatedTelephoneNumbers(listOfContacts);
         if(!listOfSms.empty())
         {
-            std::string directoryPathForSmsPerContactDocuments = UTILS_FILE_SYSTEM.
-            GetFileOrDirectoryPathString(destinationPathForReportsResults,DIR_NAME_FOR_SMS_PER_CONTACT_DOCUMENTS);
+            std::string directoryPathForSmsPerContactDocuments =
+                UtilsFileSystem::GetFileOrDirectoryPathString(
+                    destinationPathForReportsResults,
+                    DIR_NAME_FOR_SMS_PER_CONTACT_DOCUMENTS);
             SaveEachSmsIntoEachContactListOfSms(listOfContacts,listOfSms);
-            if(!UTILS_FILE_SYSTEM.ExistsDirectoryPath(directoryPathForSmsPerContactDocuments))
+            if(!UtilsFileSystem::ExistsDirectoryPath(directoryPathForSmsPerContactDocuments))
             {
-                if(!UTILS_FILE_SYSTEM.CreateDirectoryPath(directoryPathForSmsPerContactDocuments))
+                if(!UtilsFileSystem::CreateDirectoryPath(directoryPathForSmsPerContactDocuments))
                 {
                     return std::pair<bool,std::string>(false,
                     "Error creating the directory for the sms per contact documents: " + 
                     std::string(strerror(errno)));
                 }
             }
-            CreateSmsPerContactDocuments(directoryPathForSmsPerContactDocuments,listOfContacts);
+            CreateSmsPerContactDocuments(directoryPathForSmsPerContactDocuments,
+                listOfContacts);
         }
         CTML::Document contactsHtmlDocument;
-        UTILS_HTML.HtmlWriteDocumentHead(contactsHtmlDocument,HTML_CHAR_ENCODING,HTML_VIEWPORT,HTML_AUTHOR,
-        HTML_STYLE_SHEETS_PATHS_FROM_ROOT_DIR,HTML_DOCUMENT_HEAD_TITLE);
+        UtilsHtml::HtmlWriteDocumentHead(contactsHtmlDocument,HTML_CHAR_ENCODING,
+            HTML_VIEWPORT,HTML_AUTHOR,HTML_STYLE_SHEETS_PATHS_FROM_ROOT_DIR,
+            HTML_DOCUMENT_HEAD_TITLE);
         if(smsFilePath.empty())
         {
             navigationBarButtonsNamesAndLinks.pop_back();
         }
-        UTILS_HTML.HtmlWriteHeaderInDocumentBody(contactsHtmlDocument,HTML_DOCUMENT_HEAD_TITLE,
-        navigationBarButtonsNamesAndLinks,0);
-        UTILS_HTML.HtmlWriteContactsReportResultInDocumentBody(contactsHtmlDocument,HTML_CONTACTS_TITLE,
-        listOfContacts,UTILS_FILE_SYSTEM.GetFileOrDirectoryPathString(destinationPathForReportsResults,DIR_NAME_FOR_SMS_PER_CONTACT_DOCUMENTS),
-        FILE_EXTENSION_HTML);
-        UTILS_HTML.HtmlWriteScriptsInDocumentBody(contactsHtmlDocument,HTML_SCRIPTS_PATHS_FROM_ROOT_DIR);
+        UtilsHtml::HtmlWriteHeaderInDocumentBody(contactsHtmlDocument,
+            HTML_DOCUMENT_HEAD_TITLE,navigationBarButtonsNamesAndLinks,0);
+        UtilsHtml::HtmlWriteContactsReportResultInDocumentBody(contactsHtmlDocument,
+            HTML_CONTACTS_TITLE,listOfContacts,UtilsFileSystem::
+                GetFileOrDirectoryPathString(destinationPathForReportsResults,
+                DIR_NAME_FOR_SMS_PER_CONTACT_DOCUMENTS),
+            FILE_EXTENSION_HTML);
+        UtilsHtml::HtmlWriteScriptsInDocumentBody(contactsHtmlDocument,
+            HTML_SCRIPTS_PATHS_FROM_ROOT_DIR);
         isReportsResultsDirectoriesStructureValid = 
-        CheckAndCreateReportsResultsDirectoriesStructure(destinationPathForReportsResults);
+            CheckAndCreateReportsResultsDirectoriesStructure(destinationPathForReportsResults);
         if(!isReportsResultsDirectoriesStructureValid.first)
         {
             return isReportsResultsDirectoriesStructureValid;
         }
-        if(!contactsHtmlDocument.WriteToFile(UTILS_FILE_SYSTEM.GetFileOrDirectoryPathString(
+        if(!contactsHtmlDocument.WriteToFile(UtilsFileSystem::GetFileOrDirectoryPathString(
         destinationPathForReportsResults,FILE_CONTACTS_REPORT_RESULT),CTML::Readability::MULTILINE))
         {
             return std::pair<bool,std::string>(false,
@@ -174,18 +185,19 @@ void ExecContactsAndSmsReports::setLanguageLocalization(const std::string & loca
 std::pair<bool,std::string> ExecContactsAndSmsReports::CheckAndCreateReportsResultsDirectoriesStructure
 (const std::string & destinationPathForReportsResults)
 {
-    std::string originPathForStyles = UTILS_FILE_SYSTEM.GetFileOrDirectoryPathString(".",
-    DIR_NAME_FOR_STYLES);
-    std::string destinationPathForStyles = UTILS_FILE_SYSTEM.
-    GetFileOrDirectoryPathString(destinationPathForReportsResults,DIR_NAME_FOR_STYLES);
-    if(!UTILS_FILE_SYSTEM.ExistsDirectoryPath(destinationPathForReportsResults))
+    std::string originPathForStyles = UtilsFileSystem::
+        GetFileOrDirectoryPathString(".",DIR_NAME_FOR_STYLES);
+    std::string destinationPathForStyles = UtilsFileSystem::
+        GetFileOrDirectoryPathString(destinationPathForReportsResults,
+        DIR_NAME_FOR_STYLES);
+    if(!UtilsFileSystem::ExistsDirectoryPath(destinationPathForReportsResults))
     {
-        if(!UTILS_FILE_SYSTEM.CreateDirectoryPath(destinationPathForReportsResults))
+        if(!UtilsFileSystem::CreateDirectoryPath(destinationPathForReportsResults))
         {
             return std::pair<bool,std::string>(false,"Error creating the directory for the report results: " + 
             std::string(strerror(errno)));
         }
-        if(!UTILS_FILE_SYSTEM.CreateDirectoryPath(destinationPathForStyles))
+        if(!UtilsFileSystem::CreateDirectoryPath(destinationPathForStyles))
         {
             return std::pair<bool,std::string>(false,"Error creating the directory for the styles: " + 
             std::string(strerror(errno)));
@@ -193,24 +205,27 @@ std::pair<bool,std::string> ExecContactsAndSmsReports::CheckAndCreateReportsResu
     }
     else
     {
-        if(!UTILS_FILE_SYSTEM.ExistsDirectoryPath(destinationPathForStyles))
+        if(!UtilsFileSystem::ExistsDirectoryPath(destinationPathForStyles))
         {
-            if(!UTILS_FILE_SYSTEM.CreateDirectoryPath(destinationPathForStyles))
+            if(!UtilsFileSystem::CreateDirectoryPath(destinationPathForStyles))
             {
-                return std::pair<bool,std::string>(false,"Error creating the directory for the styles: " + 
-                std::string(strerror(errno)));
+                return std::pair<bool,std::string>(false,
+                    "Error creating the directory for the styles: "
+                    + std::string(strerror(errno)));
             }
         }
     }
     for(std::vector<std::string>::const_iterator fileNameIterator = DIR_CONTENT_STYLES.begin(); 
     fileNameIterator != DIR_CONTENT_STYLES.end(); ++fileNameIterator)
     {
-        if(!UTILS_FILE_SYSTEM.CopyFile(UTILS_FILE_SYSTEM.GetFileOrDirectoryPathString(originPathForStyles,
-        *fileNameIterator),UTILS_FILE_SYSTEM.GetFileOrDirectoryPathString(destinationPathForStyles,
-        *fileNameIterator)))
+        if(!UtilsFileSystem::CopyFile(UtilsFileSystem::
+            GetFileOrDirectoryPathString(originPathForStyles,*fileNameIterator),
+            UtilsFileSystem::GetFileOrDirectoryPathString(destinationPathForStyles,
+            *fileNameIterator)))
         {
-            return std::pair<bool,std::string>(false,"Error copying the file '" + *fileNameIterator + 
-            "' in styles destination folder: " + std::string(strerror(errno)));
+            return std::pair<bool,std::string>(false,"Error copying the file '" +
+            *fileNameIterator + "' in styles destination folder: "
+            + std::string(strerror(errno)));
         }
     }
     return std::pair<bool,std::string>(true,std::string());
@@ -542,16 +557,18 @@ std::vector<Contact> listOfContacts)
         {
             std::string contactName = (*listOfContactsIterator).GetName();
             CTML::Document htmlDocument;
-            UTILS_HTML.HtmlWriteDocumentHead(htmlDocument,HTML_CHAR_ENCODING,HTML_VIEWPORT,HTML_AUTHOR,
-            HTML_STYLE_SHEETS_PATHS_FROM_SMS_PER_CONTACT_DIR,HTML_DOCUMENT_HEAD_TITLE);
-            UTILS_HTML.HtmlWriteHeaderInDocumentBody(htmlDocument,HTML_DOCUMENT_HEAD_TITLE,
-            HTML_NAVIGATION_BAR_BUTTON_NAMES_AND_LINKS_FROM_SMS_PER_CONTACT_DIR,-1);
-            UTILS_HTML.HtmlWriteSmsReportResultInDocumentBody(htmlDocument,
-            contactName + " " + HTML_SMS_TITLE,(*listOfContactsIterator).GetListOfSms());
-            UTILS_HTML.HtmlWriteScriptsInDocumentBody(htmlDocument,
-            HTML_SCRIPTS_PATHS_FROM_SMS_PER_CONTACT_DIR);
-            htmlDocument.WriteToFile(UTILS_FILE_SYSTEM.GetFileOrDirectoryPathString(directoryPath,
-            contactName + FILE_EXTENSION_HTML),CTML::Readability::MULTILINE);
+            UtilsHtml::HtmlWriteDocumentHead(htmlDocument,HTML_CHAR_ENCODING,
+                HTML_VIEWPORT,HTML_AUTHOR,HTML_STYLE_SHEETS_PATHS_FROM_SMS_PER_CONTACT_DIR,
+                HTML_DOCUMENT_HEAD_TITLE);
+            UtilsHtml::HtmlWriteHeaderInDocumentBody(htmlDocument,HTML_DOCUMENT_HEAD_TITLE,
+                HTML_NAVIGATION_BAR_BUTTON_NAMES_AND_LINKS_FROM_SMS_PER_CONTACT_DIR,-1);
+            UtilsHtml::HtmlWriteSmsReportResultInDocumentBody(htmlDocument,
+                contactName + " " + HTML_SMS_TITLE,(*listOfContactsIterator).GetListOfSms());
+            UtilsHtml::HtmlWriteScriptsInDocumentBody(htmlDocument,
+                HTML_SCRIPTS_PATHS_FROM_SMS_PER_CONTACT_DIR);
+            htmlDocument.WriteToFile(UtilsFileSystem::GetFileOrDirectoryPathString(
+                directoryPath,contactName + FILE_EXTENSION_HTML),
+                CTML::Readability::MULTILINE);
         }
     }
 }

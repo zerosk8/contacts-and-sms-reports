@@ -55,11 +55,12 @@ string GetDestinationPathForReportsResults(const int & numberOfProgramArguments,
     (numberOfProgramArguments,programArguments,PROGRAM_OPTIONS_FOR_OUTPUT_PATH);
     if(destinationPathForReportsResults.empty())
     {
-        return UTILS_FILE_SYSTEM.GetFileOrDirectoryPathString
-        (UTILS_FILE_SYSTEM.GetCurrentDirectoryPath(),DIR_NAME_FOR_REPORT_RESULTS);
+        return UtilsFileSystem::
+            GetFileOrDirectoryPathString(UtilsFileSystem::GetCurrentDirectoryPath(),
+            DIR_NAME_FOR_REPORT_RESULTS);
     }
-    return UTILS_FILE_SYSTEM.GetFileOrDirectoryPathString
-    (destinationPathForReportsResults,DIR_NAME_FOR_REPORT_RESULTS);
+    return UtilsFileSystem::GetFileOrDirectoryPathString(destinationPathForReportsResults,
+        DIR_NAME_FOR_REPORT_RESULTS);
 }
 
 string GetOptionValueFromProgramArguments(const int & numberOfProgramArguments, char ** programArguments, 

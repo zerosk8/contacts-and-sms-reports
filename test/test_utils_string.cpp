@@ -56,3 +56,13 @@ TEST_CASE("[TestUtilsString] When a string with new line chars on end, TrimWhite
 {
     REQUIRE(UtilsString::TrimWhiteSpacesFromEndOfString(testUtilsStringWithNewlineCharsOnEnd) == testUtilsStringStringWithNoSpaces);
 }
+
+TEST_CASE("[TestUtilsString] When an empty string is given, TrimWhiteSpacesFromStartOfString returns an empty string","[UtilsString]")
+{
+    REQUIRE(UtilsString::TrimWhiteSpacesFromStartOfString(std::string()) == "");
+}
+
+TEST_CASE("[TestUtilsString] When an empty string is given, TrimWhiteSpacesFromEndOfString returns an empty string","[UtilsString]")
+{
+    REQUIRE(UtilsString::TrimWhiteSpacesFromEndOfString(std::string()) == "");
+}

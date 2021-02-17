@@ -64,8 +64,6 @@ std::pair<std::string,std::string>("Messages", FILE_SMS_REPORT_RESULT) };
 const std::vector<std::pair<std::string,std::string>> HTML_NAVIGATION_BAR_BUTTON_NAMES_AND_LINKS_FROM_SMS_PER_CONTACT_DIR = 
 { std::pair<std::string,std::string>("Contacts", "../" + FILE_CONTACTS_REPORT_RESULT), 
 std::pair<std::string,std::string>("Messages", "../" + FILE_SMS_REPORT_RESULT) };
-static UtilsFileSystem UTILS_FILE_SYSTEM;
-static UtilsHtml UTILS_HTML;
 
 class ExecContactsAndSmsReports
 {
