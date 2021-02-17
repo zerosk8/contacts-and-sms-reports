@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <clocale>
 #include "contact.hpp"
 #include "utils_string.hpp"
 #include "utils_file_system.hpp"
