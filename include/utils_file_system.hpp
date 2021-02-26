@@ -15,23 +15,23 @@
 // NOT "using namespace std;" BECAUSE OF THIS
 // https://stackoverflow.com/questions/5527665/why-am-i-getting-string-does-not-name-a-type-error
 
-const char WINDOWS_PATH_DELIMITER = '\\';
-const char UNIX_PATH_DELIMITER = '/';
-const std::string CURRENT_DIRECTORY_PATH = ".";
+const char PATH_DELIMITER_WINDOWS = '\\';
+const char PATH_DELIMITER_UNIX = '/';
+const std::string RELATIVE_PATH_CURRENT = ".";
 
 class UtilsFileSystem
 {
     public:
         static bool OpenDestinationFile(std::ifstream & file,
-            const char * fileName);
+            const std::string & filePath);
         static bool CopyFile(const std::string & originFilePath,
             const std::string & destinationFilePath);
         static bool ExistsDirectoryPath(const std::string & directoryPath);
         static bool CreateDirectoryPath(const std::string & directoryPath);
-        static std::string GetCurrentDirectoryPath();
+        static std::string GetCurrentRelativePath();
         static std::string GetFileOrDirectoryPathString(
             const std::string & parentDirectoryPath,
-            const std::string & directoryName);
+            const std::string & fileOrDirectoryName);
 };
 
 #endif

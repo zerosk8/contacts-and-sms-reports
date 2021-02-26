@@ -27,7 +27,7 @@ std::pair<bool,std::string> ExecContactsAndSmsReports::ExecContactsAndSmsReports
     
     if(!smsFilePath.empty())
     {
-        if(!UtilsFileSystem::OpenDestinationFile(file,smsFilePath.c_str()))
+        if(!UtilsFileSystem::OpenDestinationFile(file,smsFilePath))
         {
             return std::pair<bool,std::string>(false,"Error opening the sms file: " + 
             std::string(strerror(errno)));
@@ -80,7 +80,7 @@ std::pair<bool,std::string> ExecContactsAndSmsReports::ExecContactsAndSmsReports
     }
     if(!contactsFilePath.empty())
     {
-        if(!UtilsFileSystem::OpenDestinationFile(file,contactsFilePath.c_str()))
+        if(!UtilsFileSystem::OpenDestinationFile(file,contactsFilePath))
         {
             return std::pair<bool,std::string>(false,"Error opening the contacts file: " + 
             std::string(strerror(errno)));

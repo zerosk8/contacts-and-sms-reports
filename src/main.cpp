@@ -9,11 +9,13 @@ const string PROGRAM_OPTIONS_FOR_CONTACTS_FILE_LOADING = "-c --contacts";
 const string PROGRAM_OPTIONS_FOR_SMS_FILE_LOADING = "-s --sms";
 const string PROGRAM_OPTIONS_FOR_OUTPUT_PATH = "-o --output";
 
-string GetDestinationPathForReportsResults(const int & numberOfProgramArguments, char ** programArguments);
-string GetOptionValueFromProgramArguments(const int & numberOfProgramArguments, char ** programArguments, 
+string GetDestinationPathForReportsResults(const int & numberOfProgramArguments,
+    char ** programArguments);
+string GetOptionValueFromProgramArguments(const int & numberOfProgramArguments,
+    char ** programArguments, 
 const string & programOption);
 signed char GetOptionIndexFromProgramArguments(const int & numberOfProgramArguments, 
-char ** programArguments, const string & programOption);
+    char ** programArguments, const string & programOption);
 
 int main(int argc, char ** argv)
 {
@@ -49,26 +51,26 @@ int main(int argc, char ** argv)
 
 /**************************************/
 
-string GetDestinationPathForReportsResults(const int & numberOfProgramArguments, char ** programArguments)
+string GetDestinationPathForReportsResults(const int & numberOfProgramArguments,
+    char ** programArguments)
 {
     string destinationPathForReportsResults = GetOptionValueFromProgramArguments
     (numberOfProgramArguments,programArguments,PROGRAM_OPTIONS_FOR_OUTPUT_PATH);
     if(destinationPathForReportsResults.empty())
     {
-        return UtilsFileSystem::
-            GetFileOrDirectoryPathString(UtilsFileSystem::GetCurrentDirectoryPath(),
-            DIR_NAME_FOR_REPORT_RESULTS);
+        return UtilsFileSystem::GetFileOrDirectoryPathString(
+            UtilsFileSystem::GetCurrentRelativePath(),DIR_NAME_FOR_REPORT_RESULTS);
     }
     return UtilsFileSystem::GetFileOrDirectoryPathString(destinationPathForReportsResults,
         DIR_NAME_FOR_REPORT_RESULTS);
 }
 
-string GetOptionValueFromProgramArguments(const int & numberOfProgramArguments, char ** programArguments, 
-const string & programOption)
+string GetOptionValueFromProgramArguments(const int & numberOfProgramArguments,
+    char ** programArguments, const string & programOption)
 {
     signed char argumentIndex;
-    if((argumentIndex = GetOptionIndexFromProgramArguments(numberOfProgramArguments,programArguments,
-    programOption)) == -1)
+    if((argumentIndex = GetOptionIndexFromProgramArguments(numberOfProgramArguments,
+        programArguments,programOption)) == -1)
     {
         return string();
     }

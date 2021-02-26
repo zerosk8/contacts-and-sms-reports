@@ -1,12 +1,14 @@
 #include "utils_file_system.hpp"
 
-bool UtilsFileSystem::OpenDestinationFile(std::ifstream & file, const char * fileName)
+bool UtilsFileSystem::OpenDestinationFile(std::ifstream & file,
+    const std::string & filePath)
 {
-    file.open(fileName,std::ios::in);
+    file.open(filePath,std::ios::in);
     return !file.fail();
 }
 
-bool UtilsFileSystem::CopyFile(const std::string & originFilePath, const std::string & destinationFilePath)
+bool UtilsFileSystem::CopyFile(const std::string & originFilePath,
+    const std::string & destinationFilePath)
 {
     std::ifstream originFile;
     std::ofstream destinationFile;
@@ -30,7 +32,8 @@ bool UtilsFileSystem::ExistsDirectoryPath(const std::string & directoryPath)
 {   
     #ifdef _WIN32
         unsigned long directoryInfo = GetFileAttributesA(directoryPath.c_str());
-        return !(directoryInfo == INVALID_FILE_ATTRIBUTES) && (directoryInfo & FILE_ATTRIBUTE_DIRECTORY);
+        return !(directoryInfo == INVALID_FILE_ATTRIBUTES)
+            && (directoryInfo & FILE_ATTRIBUTE_DIRECTORY);
     #else
         struct stat directoryInfo;
         return (stat(directoryPath.c_str(),&directoryInfo) == 0) && (directoryInfo.st_mode & S_IFDIR);
@@ -53,23 +56,24 @@ bool UtilsFileSystem::CreateDirectoryPath(const std::string & directoryPath)
     return true;
 }
 
-std::string UtilsFileSystem::GetCurrentDirectoryPath()
+std::string UtilsFileSystem::GetCurrentRelativePath()
 {
-    return CURRENT_DIRECTORY_PATH;
+    return RELATIVE_PATH_CURRENT;
 }
 
-std::string UtilsFileSystem::GetFileOrDirectoryPathString(const std::string & parentDirectoryPath, 
-const std::string & directoryName)
+std::string UtilsFileSystem::GetFileOrDirectoryPathString(
+    const std::string & parentDirectoryPath, const std::string & fileOrDirectoryName)
 {
-    if(!parentDirectoryPath.empty())
+    if(!parentDirectoryPath.empty() && !fileOrDirectoryName.empty())
     {
-        std::string path = parentDirectoryPath;
         #ifdef _WIN32
-            (path[path.size() - 1] != WINDOWS_PATH_DELIMITER)?path += WINDOWS_PATH_DELIMITER:path;
+            char pathDelimiter = PATH_DELIMITER_WINDOWS;
         #else
-            (path[path.size() - 1] != UNIX_PATH_DELIMITER)?path += UNIX_PATH_DELIMITER:path;
+            char pathDelimiter = PATH_DELIMITER_UNIX;
         #endif
-        return path + directoryName;
+        std::string path = (parentDirectoryPath.back() != pathDelimiter)?
+            parentDirectoryPath + pathDelimiter:parentDirectoryPath;
+        return path + fileOrDirectoryName;
     }
     return std::string();
 }

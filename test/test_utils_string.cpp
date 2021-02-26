@@ -38,7 +38,7 @@ TEST_CASE("[TestUtilsString] When a string with no spaces on end, TrimWhiteSpace
 {
     REQUIRE(UtilsString::TrimWhiteSpacesFromEndOfString(testUtilsStringStringWithNoSpaces) == testUtilsStringStringWithNoSpaces);
 }
-/**/
+
 TEST_CASE("[TestUtilsString] When a string with spaces on end, TrimWhiteSpacesFromEndOfString returns a string with no spaces on end",
     "[UtilsString]")
 {
