@@ -71,7 +71,7 @@ std::pair<bool,std::string> ExecContactsAndSmsReports::ExecContactsAndSmsReports
         {
             return isReportsResultsDirectoriesStructureValid;
         }
-        if(!smsHtmlDocument.WriteToFile(UtilsFileSystem::GetFileOrDirectoryPathString
+        if(!smsHtmlDocument.WriteToFile(UtilsFileSystem::CreateStringPath
         (destinationPathForReportsResults,FILE_SMS_REPORT_RESULT),CTML::Readability::MULTILINE))
         {
             return std::pair<bool,std::string>(false,"Error opening the sms report result file: " + 
@@ -124,13 +124,13 @@ std::pair<bool,std::string> ExecContactsAndSmsReports::ExecContactsAndSmsReports
         if(!listOfSms.empty())
         {
             std::string directoryPathForSmsPerContactDocuments =
-                UtilsFileSystem::GetFileOrDirectoryPathString(
+                UtilsFileSystem::CreateStringPath(
                     destinationPathForReportsResults,
                     DIR_NAME_FOR_SMS_PER_CONTACT_DOCUMENTS);
             SaveEachSmsIntoEachContactListOfSms(listOfContacts,listOfSms);
-            if(!UtilsFileSystem::ExistsDirectoryPath(directoryPathForSmsPerContactDocuments))
+            if(!UtilsFileSystem::ExistsDirectory(directoryPathForSmsPerContactDocuments))
             {
-                if(!UtilsFileSystem::CreateDirectoryPath(directoryPathForSmsPerContactDocuments))
+                if(!UtilsFileSystem::CreateDirectory(directoryPathForSmsPerContactDocuments))
                 {
                     return std::pair<bool,std::string>(false,
                     "Error creating the directory for the sms per contact documents: " + 
@@ -152,7 +152,7 @@ std::pair<bool,std::string> ExecContactsAndSmsReports::ExecContactsAndSmsReports
             HTML_DOCUMENT_HEAD_TITLE,navigationBarButtonsNamesAndLinks,0);
         UtilsHtml::HtmlWriteContactsReportResultInDocumentBody(contactsHtmlDocument,
             HTML_CONTACTS_TITLE,listOfContacts,UtilsFileSystem::
-                GetFileOrDirectoryPathString(destinationPathForReportsResults,
+                CreateStringPath(destinationPathForReportsResults,
                 DIR_NAME_FOR_SMS_PER_CONTACT_DOCUMENTS),
             FILE_EXTENSION_HTML);
         UtilsHtml::HtmlWriteScriptsInDocumentBody(contactsHtmlDocument,
@@ -163,7 +163,7 @@ std::pair<bool,std::string> ExecContactsAndSmsReports::ExecContactsAndSmsReports
         {
             return isReportsResultsDirectoriesStructureValid;
         }
-        if(!contactsHtmlDocument.WriteToFile(UtilsFileSystem::GetFileOrDirectoryPathString(
+        if(!contactsHtmlDocument.WriteToFile(UtilsFileSystem::CreateStringPath(
         destinationPathForReportsResults,FILE_CONTACTS_REPORT_RESULT),CTML::Readability::MULTILINE))
         {
             return std::pair<bool,std::string>(false,
@@ -186,18 +186,18 @@ std::pair<bool,std::string> ExecContactsAndSmsReports::CheckAndCreateReportsResu
 (const std::string & destinationPathForReportsResults)
 {
     std::string originPathForStyles = UtilsFileSystem::
-        GetFileOrDirectoryPathString(".",DIR_NAME_FOR_STYLES);
+        CreateStringPath(".",DIR_NAME_FOR_STYLES);
     std::string destinationPathForStyles = UtilsFileSystem::
-        GetFileOrDirectoryPathString(destinationPathForReportsResults,
+        CreateStringPath(destinationPathForReportsResults,
         DIR_NAME_FOR_STYLES);
-    if(!UtilsFileSystem::ExistsDirectoryPath(destinationPathForReportsResults))
+    if(!UtilsFileSystem::ExistsDirectory(destinationPathForReportsResults))
     {
-        if(!UtilsFileSystem::CreateDirectoryPath(destinationPathForReportsResults))
+        if(!UtilsFileSystem::CreateDirectory(destinationPathForReportsResults))
         {
             return std::pair<bool,std::string>(false,"Error creating the directory for the report results: " + 
             std::string(strerror(errno)));
         }
-        if(!UtilsFileSystem::CreateDirectoryPath(destinationPathForStyles))
+        if(!UtilsFileSystem::CreateDirectory(destinationPathForStyles))
         {
             return std::pair<bool,std::string>(false,"Error creating the directory for the styles: " + 
             std::string(strerror(errno)));
@@ -205,9 +205,9 @@ std::pair<bool,std::string> ExecContactsAndSmsReports::CheckAndCreateReportsResu
     }
     else
     {
-        if(!UtilsFileSystem::ExistsDirectoryPath(destinationPathForStyles))
+        if(!UtilsFileSystem::ExistsDirectory(destinationPathForStyles))
         {
-            if(!UtilsFileSystem::CreateDirectoryPath(destinationPathForStyles))
+            if(!UtilsFileSystem::CreateDirectory(destinationPathForStyles))
             {
                 return std::pair<bool,std::string>(false,
                     "Error creating the directory for the styles: "
@@ -218,9 +218,9 @@ std::pair<bool,std::string> ExecContactsAndSmsReports::CheckAndCreateReportsResu
     for(std::vector<std::string>::const_iterator fileNameIterator = DIR_CONTENT_STYLES.begin(); 
     fileNameIterator != DIR_CONTENT_STYLES.end(); ++fileNameIterator)
     {
-        if(!UtilsFileSystem::CopyFile(UtilsFileSystem::
-            GetFileOrDirectoryPathString(originPathForStyles,*fileNameIterator),
-            UtilsFileSystem::GetFileOrDirectoryPathString(destinationPathForStyles,
+        if(!UtilsFileSystem::DuplicateFile(UtilsFileSystem::
+            CreateStringPath(originPathForStyles,*fileNameIterator),
+            UtilsFileSystem::CreateStringPath(destinationPathForStyles,
             *fileNameIterator)))
         {
             return std::pair<bool,std::string>(false,"Error copying the file '" +
@@ -566,7 +566,7 @@ std::vector<Contact> listOfContacts)
                 contactName + " " + HTML_SMS_TITLE,(*listOfContactsIterator).GetListOfSms());
             UtilsHtml::HtmlWriteScriptsInDocumentBody(htmlDocument,
                 HTML_SCRIPTS_PATHS_FROM_SMS_PER_CONTACT_DIR);
-            htmlDocument.WriteToFile(UtilsFileSystem::GetFileOrDirectoryPathString(
+            htmlDocument.WriteToFile(UtilsFileSystem::CreateStringPath(
                 directoryPath,contactName + FILE_EXTENSION_HTML),
                 CTML::Readability::MULTILINE);
         }

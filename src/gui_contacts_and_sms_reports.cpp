@@ -101,7 +101,7 @@ void GUIContactsAndSmsReports::OnGUIExecuteButton()
     std::pair<bool,std::string> applicationExecResult;
     applicationExec = ExecContactsAndSmsReports(contactsFilePathButton->get_filename(),
         smsFilePathButton->get_filename(),UtilsFileSystem::
-        GetFileOrDirectoryPathString(destinationPathButton->get_filename(),
+        CreateStringPath(destinationPathButton->get_filename(),
         DIR_NAME_FOR_REPORT_RESULTS));
     applicationExecResult = applicationExec.Run();
     if(!applicationExecResult.first)

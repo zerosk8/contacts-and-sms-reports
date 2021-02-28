@@ -1,5 +1,5 @@
 CXX = x86_64-w64-mingw32-g++
-CSTD = -std=c++14
+CSTD = -std=c++17
 CLASS_TELEPHONE_NUMBER = telephone_number
 CLASS_CONTACT = contact
 CLASS_SMS = sms

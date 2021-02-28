@@ -20,6 +20,9 @@
         testUtilsFileSystemAbsolutePathToNonExistingFile("/home/zerosk8/Desarrollo Software/Proyectos C++/contacts-and-sms-reports/test/assets/fake_file.txt"),
         testUtilsFileSystemRelativePathToExistingDirectory("./test/assets/example_directory"),
         testUtilsFileSystemAbsolutePathToExistingDirectory("/home/zerosk8/Desarrollo Software/Proyectos C++/contacts-and-sms-reports/test/assets/example_directory"),
+        testUtilsFileSystemRelativePathToNonExistingDirectory("./test/assets/fake_directory"),
+        testUtilsFileSystemAbsolutePathToNonExistingDirectory("/home/zerosk8/Desarrollo Software/Proyectos C++/contacts-and-sms-reports/test/assets/fake_directory"),
+        testUtilsFileSystemCurrentDirectoryPath("/home/zerosk8/Desarrollo Software/Proyectos C++/contacts-and-sms-reports"),
         testUtilsFileSystemAbsolutePathWithDelimiter("/home/zerosk8/"),
         testUtilsFileSystemAbsolutePathWithoutDelimiter("/home/zerosk8/");
 #endif
@@ -29,14 +32,14 @@ std::ifstream testUtilsFileSystemFileInputStream;
 TEST_CASE("[TestUtilsFileSystem] Getting the current relative path works properly",
     "[UtilsFileSystem]")
 {
-    REQUIRE(UtilsFileSystem::GetCurrentRelativePath() == ".");
+    REQUIRE(UtilsFileSystem::GetWorkingDirectoryPath() == testUtilsFileSystemCurrentDirectoryPath);
 }
 
 TEST_CASE("[TestUtilsFileSystem] Getting the absolute directory or file path works properly when the delimiter is given in the path",
     "[UtilsFileSystem]")
 {
     REQUIRE(UtilsFileSystem::
-        GetFileOrDirectoryPathString(testUtilsFileSystemAbsolutePathWithDelimiter,"hello_folder") 
+        CreateStringPath(testUtilsFileSystemAbsolutePathWithDelimiter,"hello_folder") 
         == testUtilsFileSystemAbsolutePathWithDelimiter + "hello_folder");
 }
 
@@ -45,64 +48,89 @@ TEST_CASE("[TestUtilsFileSystem] Getting the absolute directory or file path wor
 {
     #
     REQUIRE(UtilsFileSystem::
-        GetFileOrDirectoryPathString(testUtilsFileSystemAbsolutePathWithoutDelimiter,"hello_folder")
+        CreateStringPath(testUtilsFileSystemAbsolutePathWithoutDelimiter,"hello_folder")
         == testUtilsFileSystemAbsolutePathWithoutDelimiter + "\\hello_folder");
 }
 
 TEST_CASE("[TestUtilsFileSystem] When an empty path is given, getting the absolute directory or file path returns an empty string",
     "[UtilsFileSystem]")
 {
-    REQUIRE(UtilsFileSystem::GetFileOrDirectoryPathString("","hello_folder") == "");
+    REQUIRE(UtilsFileSystem::CreateStringPath("","hello_folder") == "");
 }
 
 TEST_CASE("[TestUtilsFileSystem] When an empty file or directory name is given, getting the absolute directory or file path returns an empty string",
     "[UtilsFileSystem]")
 {
     REQUIRE(UtilsFileSystem::
-        GetFileOrDirectoryPathString(testUtilsFileSystemAbsolutePathWithoutDelimiter,"") == "");
+        CreateStringPath(testUtilsFileSystemAbsolutePathWithoutDelimiter,"") == "");
 }
 
 TEST_CASE("[TestUtilsFileSystem] When checking an existing relative directory path, 'true' value is returned",
     "[UtilsFileSystem]")
 {
     REQUIRE(UtilsFileSystem::
-        ExistsDirectoryPath(testUtilsFileSystemRelativePathToExistingDirectory));
+        ExistsDirectory(testUtilsFileSystemRelativePathToExistingDirectory));
 }
 
 TEST_CASE("[TestUtilsFileSystem] When checking an existing absolute directory path, 'true' value is returned",
     "[UtilsFileSystem]")
 {
     REQUIRE(UtilsFileSystem::
-        ExistsDirectoryPath(testUtilsFileSystemAbsolutePathToExistingDirectory));
+        ExistsDirectory(testUtilsFileSystemAbsolutePathToExistingDirectory));
 }
 
 TEST_CASE("[TestUtilsFileSystem] When checking an non-existing relative directory path, 'false' value is returned",
     "[UtilsFileSystem]")
 {
     REQUIRE_FALSE(UtilsFileSystem::
-        ExistsDirectoryPath(testUtilsFileSystemRelativePathToNonExistingDirectory));
+        ExistsDirectory(testUtilsFileSystemRelativePathToNonExistingDirectory));
 }
 
 TEST_CASE("[TestUtilsFileSystem] When checking an non-existing absolute directory path, 'false' value is returned",
     "[UtilsFileSystem]")
 {
     REQUIRE_FALSE(UtilsFileSystem::
-        ExistsDirectoryPath(testUtilsFileSystemAbsolutePathToNonExistingDirectory));
+        ExistsDirectory(testUtilsFileSystemAbsolutePathToNonExistingDirectory));
 }
 
 TEST_CASE("[TestUtilsFileSystem] When checking an existing relative directory path which is a file, 'false' value is returned",
     "[UtilsFileSystem]")
 {
     REQUIRE_FALSE(UtilsFileSystem::
-        ExistsDirectoryPath(testUtilsFileSystemRelativePathToExistingFile));
+        ExistsDirectory(testUtilsFileSystemRelativePathToExistingFile));
 }
 
 TEST_CASE("[TestUtilsFileSystem] When checking an existing absolute directory path which is a file, 'false' value is returned",
     "[UtilsFileSystem]")
 {
     REQUIRE_FALSE(UtilsFileSystem::
-        ExistsDirectoryPath(testUtilsFileSystemAbsolutePathToExistingFile));
+        ExistsDirectory(testUtilsFileSystemAbsolutePathToExistingFile));
 }
+
+TEST_CASE("[TestUtilsFileSystem] When creating a directory path which does not exist, 'true' value is returned",
+    "[UtilsFileSystem]")
+{
+    REQUIRE(UtilsFileSystem::
+        CreateDirectory(testUtilsFileSystemAbsolutePathToNonExistingDirectory));
+    REQUIRE(std::filesystem::remove(std::filesystem::
+        path(testUtilsFileSystemAbsolutePathToNonExistingDirectory)));
+}
+
+TEST_CASE("[TestUtilsFileSystem] When creating a directory path which already exists, 'false' value is returned",
+    "[UtilsFileSystem]")
+{
+    REQUIRE_FALSE(UtilsFileSystem::
+        CreateDirectory(testUtilsFileSystemAbsolutePathToExistingDirectory));
+}
+
+TEST_CASE("[TestUtilsFileSystem] When creating a directory path with non existing parent directory, 'false' value is returned",
+    "[UtilsFileSystem]")
+{
+    REQUIRE_FALSE(UtilsFileSystem::CreateDirectory(UtilsFileSystem::
+        CreateStringPath(testUtilsFileSystemAbsolutePathToNonExistingDirectory,
+        "test_directory")));
+}
+
 
 TEST_CASE("[TestUtilsFileSystem] When opening an existing relative file path, 'true' value is returned",
     "[UtilsFileSystem]")
@@ -159,4 +187,42 @@ TEST_CASE("[TestUtilsFileSystem] When opening an empty file path, 'false' value 
 {
     REQUIRE_FALSE(UtilsFileSystem::
         OpenDestinationFile(testUtilsFileSystemFileInputStream,""));
+}
+
+TEST_CASE("[TestUtilsFileSystem] When duplicating a file which exists into a file path which does not exist, 'true' value is returned",
+    "[UtilsFileSystem]")
+{
+    REQUIRE(UtilsFileSystem::DuplicateFile(testUtilsFileSystemAbsolutePathToExistingFile,
+        testUtilsFileSystemAbsolutePathToNonExistingFile));
+    REQUIRE(std::filesystem::remove(std::filesystem::
+        path(testUtilsFileSystemAbsolutePathToNonExistingFile)));
+}
+
+TEST_CASE("[TestUtilsFileSystem] When duplicating a file which exists into a file path which already exists, 'true' value is returned",
+    "[UtilsFileSystem]")
+{
+    REQUIRE(UtilsFileSystem::DuplicateFile(
+        testUtilsFileSystemAbsolutePathToExistingFile,
+        UtilsFileSystem::
+        CreateStringPath(testUtilsFileSystemAbsolutePathToExistingDirectory,
+        "test_file.txt")));
+}
+
+TEST_CASE("[TestUtilsFileSystem] When duplicating a file which does not exist, 'false' value is returned",
+    "[UtilsFileSystem]")
+{
+    REQUIRE_FALSE(UtilsFileSystem::DuplicateFile(
+        testUtilsFileSystemAbsolutePathToNonExistingFile,
+        UtilsFileSystem::
+        CreateStringPath(testUtilsFileSystemAbsolutePathToExistingDirectory,
+        "test_file.txt")));
+}
+
+TEST_CASE("[TestUtilsFileSystem] When duplicating a file which exists into a file path which parent directory does not exist, 'false' value is returned",
+    "[UtilsFileSystem]")
+{
+    REQUIRE_FALSE(UtilsFileSystem::DuplicateFile(testUtilsFileSystemAbsolutePathToExistingFile,
+        UtilsFileSystem::
+        CreateStringPath(testUtilsFileSystemAbsolutePathToNonExistingDirectory,
+        "test_file.txt")));
 }
