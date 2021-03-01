@@ -3,8 +3,12 @@
 bool UtilsFileSystem::OpenDestinationFile(std::ifstream & file,
     const std::string & filePath)
 {
-    file.open(filePath,std::ios::in);
-    return !file.fail();
+    if(std::filesystem::is_regular_file(std::filesystem::path(filePath)))
+    {
+        file.open(filePath,std::ios::in);
+        return !file.fail();
+    }
+    return false;
 }
 
 bool UtilsFileSystem::DuplicateFile(const std::string & sourceFilePath,

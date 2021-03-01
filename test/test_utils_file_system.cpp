@@ -15,27 +15,27 @@
         testUtilsFileSystemAbsolutePathWithoutDelimiter("D:\\zerosk8");
 #else
     std::string testUtilsFileSystemRelativePathToExistingFile("./test/assets/example_file.txt"),
-        testUtilsFileSystemAbsolutePathToExistingFile("/home/zerosk8/Desarrollo Software/Proyectos C++/contacts-and-sms-reports/test/assets/example_file.txt"),
+        testUtilsFileSystemAbsolutePathToExistingFile("/mnt/d/zerosk8/Desarrollo Software/Proyectos C++/contacts-and-sms-reports/test/assets/example_file.txt"),
         testUtilsFileSystemRelativePathToNonExistingFile("./test/assets/fake_file.txt"),
-        testUtilsFileSystemAbsolutePathToNonExistingFile("/home/zerosk8/Desarrollo Software/Proyectos C++/contacts-and-sms-reports/test/assets/fake_file.txt"),
+        testUtilsFileSystemAbsolutePathToNonExistingFile("/mnt/d/zerosk8/Desarrollo Software/Proyectos C++/contacts-and-sms-reports/test/assets/fake_file.txt"),
         testUtilsFileSystemRelativePathToExistingDirectory("./test/assets/example_directory"),
-        testUtilsFileSystemAbsolutePathToExistingDirectory("/home/zerosk8/Desarrollo Software/Proyectos C++/contacts-and-sms-reports/test/assets/example_directory"),
+        testUtilsFileSystemAbsolutePathToExistingDirectory("/mnt/d/zerosk8/Desarrollo Software/Proyectos C++/contacts-and-sms-reports/test/assets/example_directory"),
         testUtilsFileSystemRelativePathToNonExistingDirectory("./test/assets/fake_directory"),
-        testUtilsFileSystemAbsolutePathToNonExistingDirectory("/home/zerosk8/Desarrollo Software/Proyectos C++/contacts-and-sms-reports/test/assets/fake_directory"),
-        testUtilsFileSystemCurrentDirectoryPath("/home/zerosk8/Desarrollo Software/Proyectos C++/contacts-and-sms-reports"),
-        testUtilsFileSystemAbsolutePathWithDelimiter("/home/zerosk8/"),
-        testUtilsFileSystemAbsolutePathWithoutDelimiter("/home/zerosk8/");
+        testUtilsFileSystemAbsolutePathToNonExistingDirectory("/mnt/d/zerosk8/Desarrollo Software/Proyectos C++/contacts-and-sms-reports/test/assets/fake_directory"),
+        testUtilsFileSystemCurrentDirectoryPath("/mnt/d/zerosk8/Desarrollo Software/Proyectos C++/contacts-and-sms-reports"),
+        testUtilsFileSystemAbsolutePathWithDelimiter("/mnt/d/zerosk8/"),
+        testUtilsFileSystemAbsolutePathWithoutDelimiter("/mnt/d/zerosk8");
 #endif
 
 std::ifstream testUtilsFileSystemFileInputStream;
 
-TEST_CASE("[TestUtilsFileSystem] Getting the current relative path works properly",
+TEST_CASE("[TestUtilsFileSystem] Getting the current working directory path works properly",
     "[UtilsFileSystem]")
 {
     REQUIRE(UtilsFileSystem::GetWorkingDirectoryPath() == testUtilsFileSystemCurrentDirectoryPath);
 }
 
-TEST_CASE("[TestUtilsFileSystem] Getting the absolute directory or file path works properly when the delimiter is given in the path",
+TEST_CASE("[TestUtilsFileSystem] Creating the absolute directory or file path works properly when the delimiter is given in the parent directory path",
     "[UtilsFileSystem]")
 {
     REQUIRE(UtilsFileSystem::
@@ -43,22 +43,28 @@ TEST_CASE("[TestUtilsFileSystem] Getting the absolute directory or file path wor
         == testUtilsFileSystemAbsolutePathWithDelimiter + "hello_folder");
 }
 
-TEST_CASE("[TestUtilsFileSystem] Getting the absolute directory or file path works properly when the delimiter is not given in the path",
+TEST_CASE("[TestUtilsFileSystem] Creating the absolute directory or file path works properly when the delimiter is not given in the parent directory path",
     "[UtilsFileSystem]")
 {
-    #
+    #ifdef _WIN32
+        std::string absolutePath(testUtilsFileSystemAbsolutePathWithoutDelimiter
+            + "\\hello_folder");
+    #else
+        std::string absolutePath(testUtilsFileSystemAbsolutePathWithoutDelimiter
+            + "/hello_folder");
+    #endif
     REQUIRE(UtilsFileSystem::
-        CreateStringPath(testUtilsFileSystemAbsolutePathWithoutDelimiter,"hello_folder")
-        == testUtilsFileSystemAbsolutePathWithoutDelimiter + "\\hello_folder");
+        CreateStringPath(testUtilsFileSystemAbsolutePathWithoutDelimiter,
+            "hello_folder") == absolutePath);
 }
 
-TEST_CASE("[TestUtilsFileSystem] When an empty path is given, getting the absolute directory or file path returns an empty string",
+TEST_CASE("[TestUtilsFileSystem] When an empty parent directory path is given, creating the absolute directory or file path returns an empty string",
     "[UtilsFileSystem]")
 {
     REQUIRE(UtilsFileSystem::CreateStringPath("","hello_folder") == "");
 }
 
-TEST_CASE("[TestUtilsFileSystem] When an empty file or directory name is given, getting the absolute directory or file path returns an empty string",
+TEST_CASE("[TestUtilsFileSystem] When an empty file or directory name is given, creating the absolute directory or file path returns an empty string",
     "[UtilsFileSystem]")
 {
     REQUIRE(UtilsFileSystem::
