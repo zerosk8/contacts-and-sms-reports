@@ -94,20 +94,22 @@ class ExecContactsAndSmsReports
         bool DoLineEndsWithSmsEndLineKeyWord(const std::string & line);
         std::string GetValueFromContactsFileLine(const std::string & line);
         std::string GetFieldValueFromSmsFileLine(const std::string & line, const std::string & field);
-        void SaveContactInformation(std::vector<Contact> & listOfContacts, 
-        const std::string & contactName, const std::vector<TelephoneNumber> & contactPhoneNumbers, 
-        const std::vector<std::string> & contactEmails, 
-        const std::vector<Sms> & listOfSms = std::vector<Sms>());
-        void SaveSmsInformation(std::vector<Sms> & listOfSms, const std::string & telephoneNumber, 
-        const std::string & dateAndTime, const std::string & text, const std::string & smsType, 
-        const std::string & contactName);
+        bool SaveContactInformation(std::vector<Contact> & listOfContacts,
+            const std::string & contactName,
+            const std::vector<TelephoneNumber> & contactPhoneNumbers,
+            const std::vector<std::string> & contactEmails,
+            const std::vector<Sms> & listOfSms = std::vector<Sms>());
+        bool SaveSmsInformation(std::vector<Sms> & listOfSms,
+            const std::string & telephoneNumber, const std::string & dateAndTime,
+            const std::string & text, const std::string & smsType,
+            const std::string & contactName);
         TelephoneNumber CreateTelephoneNumberValueFromString(const std::string & line);
         SmsType CreateSmsTypeValueFromString(const std::string & line);
-        TelephoneNumber GetTelephoneNumberFromLineWithBlankSpaces(const std::string & line, 
-        const size_t & firstOccurrenceOfBlankSpace);
-        std::string RemoveCharacterFromString(const std::string & stringWithCharacter, 
-        const char & characterToRemove);
+        TelephoneNumber GetTelephoneNumberFromLineWithBlankSpaces(
+            const std::string & line, const size_t & firstOccurrenceOfBlankSpace);
         TelephoneNumber GetTelephoneNumberFromLine(const std::string & line);
+        std::string RemoveCharacterFromString(const std::string & stringWithCharacter, 
+            const char & characterToRemove);
         std::vector<Contact> BubbleSortListOfContacts(const std::vector<Contact> & listOfContacts);
         std::vector<Contact> HeapSortListOfContacts(const std::vector<Contact> & listOfContacts);
         std::vector<Contact> MergeSorteredListsOfContacts(std::vector<Contact> firstHalfOfList, 

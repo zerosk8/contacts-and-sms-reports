@@ -54,15 +54,15 @@ int main(int argc, char ** argv)
 string GetDestinationPathForReportsResults(const int & numberOfProgramArguments,
     char ** programArguments)
 {
-    string destinationPathForReportsResults =
-        GetOptionValueFromProgramArguments(numberOfProgramArguments,
-        programArguments,PROGRAM_OPTIONS_FOR_OUTPUT_PATH);
-    if(destinationPathForReportsResults.empty())
+    string parentDirectoryPath = GetOptionValueFromProgramArguments(
+        numberOfProgramArguments,programArguments,
+        PROGRAM_OPTIONS_FOR_OUTPUT_PATH);
+    if(parentDirectoryPath.empty())
     {
-        return UtilsFileSystem::CreateStringPath(
-            UtilsFileSystem::GetWorkingDirectoryPath(),DIR_NAME_FOR_REPORT_RESULTS);
+        return UtilsFileSystem::CreateStringPath(UtilsFileSystem::
+            GetWorkingDirectoryPath(),DIR_NAME_FOR_REPORT_RESULTS);
     }
-    return UtilsFileSystem::CreateStringPath(destinationPathForReportsResults,
+    return UtilsFileSystem::CreateStringPath(parentDirectoryPath,
         DIR_NAME_FOR_REPORT_RESULTS);
 }
 

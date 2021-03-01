@@ -16,12 +16,6 @@
 // NOT "using namespace std;" BECAUSE OF THIS
 // https://stackoverflow.com/questions/5527665/why-am-i-getting-string-does-not-name-a-type-error
 
-/*
-const char PATH_DELIMITER_WINDOWS = '\\';
-const char PATH_DELIMITER_UNIX = '/';
-const std::string RELATIVE_PATH_CURRENT = ".";
-*/
-
 class UtilsFileSystem
 {
     public:

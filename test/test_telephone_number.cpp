@@ -4,7 +4,7 @@
 void RequireEmptyPhoneNumber(const TelephoneNumber & phoneNumber);
 void RequireEmptyCountryDialCode(const TelephoneNumber & phoneNumber);
 
-std::string testTelephoneNumberNumber = "123456789", testTelephoneNumberCountryDialCode = "34";
+std::string testTelephoneNumberNumber = "123456789", testTelephoneNumberCountryDialCode = "+34";
 TelephoneNumber testTelephoneNumberValidTelephoneNumber(testTelephoneNumberNumber,
     testTelephoneNumberCountryDialCode), testTelephoneNumerAnotherValidTelephoneNumber("999888777");
 
@@ -24,7 +24,7 @@ TEST_CASE("[TestTelephoneNumber] Constructor with one numeric string parameter c
     RequireEmptyCountryDialCode(phoneNumber);
 }
 
-TEST_CASE("[TestTelephoneNumber] Constructor with two numeric string parameters creates a TelephoneNumber object",
+TEST_CASE("[TestTelephoneNumber] Constructor with first numeric string and second formatted numeric string parameters creates a TelephoneNumber object",
     "[TelephoneNumber]")
 {
     RequireEmptyPhoneNumber(testTelephoneNumberValidTelephoneNumber);
@@ -52,7 +52,7 @@ TEST_CASE("[TestTelephoneNumber] Constructor with empty string in first paramete
     REQUIRE_THROWS(TelephoneNumber(""));
 }
 
-TEST_CASE("[TestTelephoneNumber] Constructor with second non-numeric string parameter throws an exception",
+TEST_CASE("[TestTelephoneNumber] Constructor with second non-formatted numeric string parameter throws an exception",
     "[TelephoneNumber]")
 {
     REQUIRE_THROWS(TelephoneNumber(testTelephoneNumberNumber,"ac"));

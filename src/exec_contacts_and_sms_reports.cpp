@@ -29,19 +29,20 @@ std::pair<bool,std::string> ExecContactsAndSmsReports::ExecContactsAndSmsReports
     {
         if(!UtilsFileSystem::OpenDestinationFile(file,smsFilePath))
         {
-            return std::pair<bool,std::string>(false,"Error opening the sms file: " + 
-            std::string(strerror(errno)));
+            return std::pair<bool,std::string>(false,
+                "Error opening the sms file: " + std::string(strerror(errno)));
         }
         while(!file.eof())
         {
             getline(file,fileLine);
             if(IsLineSms(fileLine))
             {
-                SaveSmsInformation(listOfSms,GetFieldValueFromSmsFileLine(fileLine,SMS_TELEPHONE_NUMBER_KEYWORD),
-                GetFieldValueFromSmsFileLine(fileLine,SMS_DATE_AND_TIME_KEYWORD),
-                GetFieldValueFromSmsFileLine(fileLine,SMS_TEXT_KEYWORD),
-                GetFieldValueFromSmsFileLine(fileLine,SMS_TYPE_KEYWORD),
-                GetFieldValueFromSmsFileLine(fileLine,SMS_CONTACT_NAME_KEYWORD));
+                SaveSmsInformation(listOfSms,
+                    GetFieldValueFromSmsFileLine(fileLine,SMS_TELEPHONE_NUMBER_KEYWORD),
+                    GetFieldValueFromSmsFileLine(fileLine,SMS_DATE_AND_TIME_KEYWORD),
+                    GetFieldValueFromSmsFileLine(fileLine,SMS_TEXT_KEYWORD),
+                    GetFieldValueFromSmsFileLine(fileLine,SMS_TYPE_KEYWORD),
+                    GetFieldValueFromSmsFileLine(fileLine,SMS_CONTACT_NAME_KEYWORD));
             }
         }
         file.close();
@@ -71,8 +72,9 @@ std::pair<bool,std::string> ExecContactsAndSmsReports::ExecContactsAndSmsReports
         {
             return isReportsResultsDirectoriesStructureValid;
         }
-        if(!smsHtmlDocument.WriteToFile(UtilsFileSystem::CreateStringPath
-        (destinationPathForReportsResults,FILE_SMS_REPORT_RESULT),CTML::Readability::MULTILINE))
+        if(!smsHtmlDocument.WriteToFile(UtilsFileSystem::CreateStringPath(
+            destinationPathForReportsResults,FILE_SMS_REPORT_RESULT),
+            CTML::Readability::MULTILINE))
         {
             return std::pair<bool,std::string>(false,"Error opening the sms report result file: " + 
             std::string(strerror(errno)));
@@ -164,7 +166,8 @@ std::pair<bool,std::string> ExecContactsAndSmsReports::ExecContactsAndSmsReports
             return isReportsResultsDirectoriesStructureValid;
         }
         if(!contactsHtmlDocument.WriteToFile(UtilsFileSystem::CreateStringPath(
-        destinationPathForReportsResults,FILE_CONTACTS_REPORT_RESULT),CTML::Readability::MULTILINE))
+            destinationPathForReportsResults,FILE_CONTACTS_REPORT_RESULT),
+            CTML::Readability::MULTILINE))
         {
             return std::pair<bool,std::string>(false,
             "Error opening the contacts report result file: " + std::string(strerror(errno)));
@@ -298,22 +301,38 @@ const std::string & field)
     return line.substr(beginOfValue,line.find(SMS_FIELD_VALUE_SURROUNDING,beginOfValue) - beginOfValue);
 }
 
-void ExecContactsAndSmsReports::SaveContactInformation(std::vector<Contact> & listOfContacts, 
-const std::string & contactName, const std::vector<TelephoneNumber> & contactPhoneNumbers, 
-const std::vector<std::string> & contactEmails, const std::vector<Sms> & listOfSms)
+bool ExecContactsAndSmsReports::SaveContactInformation(
+    std::vector<Contact> & listOfContacts, const std::string & contactName,
+    const std::vector<TelephoneNumber> & contactPhoneNumbers, 
+    const std::vector<std::string> & contactEmails, const std::vector<Sms> & listOfSms)
 {
-    if(!contactName.empty() && !(contactPhoneNumbers.empty() && contactEmails.empty()))
+    try
     {
-        listOfContacts.push_back(Contact(contactName,contactPhoneNumbers,contactEmails,listOfSms));
+        listOfContacts.push_back(Contact(contactName,contactPhoneNumbers,
+            contactEmails,listOfSms));
+        return true;
+    }
+    catch(const std::exception & exception)
+    {
+        return false;
     }
 }
 
-void ExecContactsAndSmsReports::SaveSmsInformation(std::vector<Sms> & listOfSms, 
-const std::string & telephoneNumber, const std::string & dateAndTime, const std::string & text, 
-const std::string & smsType, const std::string & contactName)
+bool ExecContactsAndSmsReports::SaveSmsInformation(std::vector<Sms> & listOfSms,
+    const std::string & telephoneNumber, const std::string & dateAndTime,
+    const std::string & text, const std::string & smsType,
+    const std::string & contactName)
 {
-    listOfSms.push_back(Sms(CreateTelephoneNumberValueFromString(telephoneNumber),contactName,dateAndTime,
-    CreateSmsTypeValueFromString(smsType),text));
+    try
+    {
+        listOfSms.push_back(Sms(CreateTelephoneNumberValueFromString(telephoneNumber),
+            contactName,dateAndTime,CreateSmsTypeValueFromString(smsType),text));
+        return true;
+    }
+    catch(const std::exception & exception)
+    {
+        return false;
+    }
 }
 
 TelephoneNumber ExecContactsAndSmsReports::CreateTelephoneNumberValueFromString(const std::string & line)
@@ -335,8 +354,8 @@ SmsType ExecContactsAndSmsReports::CreateSmsTypeValueFromString(const std::strin
     return unknown;
 }
 
-TelephoneNumber ExecContactsAndSmsReports::GetTelephoneNumberFromLineWithBlankSpaces
-(const std::string & line, const size_t & firstOccurrenceOfBlankSpace)
+TelephoneNumber ExecContactsAndSmsReports::GetTelephoneNumberFromLineWithBlankSpaces(
+    const std::string & line, const size_t & firstOccurrenceOfBlankSpace)
 {
     std::string countryDialCode, number;
     if(COUNTRY_DIAL_CODE_START.compare(line.substr(0,COUNTRY_DIAL_CODE_START.length())) == 0)
@@ -349,19 +368,18 @@ TelephoneNumber ExecContactsAndSmsReports::GetTelephoneNumberFromLineWithBlankSp
         number = line;
     }
     number.erase(remove(number.begin(),number.end(),BLANK_CHAR),number.end());
-    return TelephoneNumber(number,countryDialCode);
+    try
+    {
+        return TelephoneNumber(number,countryDialCode);
+    }
+    catch(const std::exception & exception)
+    {
+        return TelephoneNumber();
+    }
 }
 
-std::string ExecContactsAndSmsReports::RemoveCharacterFromString(const std::string & stringWithCharacter, 
-const char & characterToRemove)
-{
-    std::string resultString = stringWithCharacter;
-    resultString.erase(remove(resultString.begin(),resultString.end(),characterToRemove),
-    resultString.end());
-    return resultString;
-}
-
-TelephoneNumber ExecContactsAndSmsReports::GetTelephoneNumberFromLine(const std::string & line)
+TelephoneNumber ExecContactsAndSmsReports::GetTelephoneNumberFromLine(
+    const std::string & line)
 {
     std::string countryDialCode, number;
     if(COUNTRY_DIAL_CODE_START.compare(line.substr(0,COUNTRY_DIAL_CODE_START.length())) == 0)
@@ -373,7 +391,23 @@ TelephoneNumber ExecContactsAndSmsReports::GetTelephoneNumberFromLine(const std:
     {
         number = line;
     }
-    return TelephoneNumber(number,countryDialCode);
+    try
+    {
+        return TelephoneNumber(number,countryDialCode);
+    }
+    catch(const std::exception & exception)
+    {
+        return TelephoneNumber();
+    }
+}
+
+std::string ExecContactsAndSmsReports::RemoveCharacterFromString(
+    const std::string & stringWithCharacter, const char & characterToRemove)
+{
+    std::string resultString = stringWithCharacter;
+    resultString.erase(remove(resultString.begin(),resultString.end(),characterToRemove),
+    resultString.end());
+    return resultString;
 }
 
 std::vector<Contact> ExecContactsAndSmsReports::BubbleSortListOfContacts

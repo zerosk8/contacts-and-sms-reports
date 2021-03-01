@@ -9,6 +9,8 @@
 class TelephoneNumber
 {
     public:
+        const std::string COUNTRY_DIAL_CODE_START = "+";
+
         TelephoneNumber();
         TelephoneNumber(const std::string & number, const std::string & countryDialCode = std::string());
         std::string GetNumber() const;
